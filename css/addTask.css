@@ -45,7 +45,7 @@ h1 {
 }
 
 .add-task-container label {
-    display:block;
+    display: block;
     width: 100%;
     height: 24px;
     font-weight: 400;
@@ -72,7 +72,7 @@ h1 {
     color: #FF8190;
 }
 
-.add-task-container input{
+.add-task-container input {
     width: 100%;
 }
 
@@ -184,7 +184,7 @@ textarea::placeholder {
 }
 
 .inputField:hover {
-    cursor:auto;
+    cursor: auto;
 }
 
 #assignedToInput,
@@ -211,7 +211,7 @@ textarea::placeholder {
     cursor: pointer;
 }
 
-.assigned-to input::placeholder{
+.assigned-to input::placeholder {
     color: #000000;
 }
 

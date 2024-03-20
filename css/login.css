@@ -14,7 +14,7 @@ body {
   top: 150px;
   left: 40%;
   right: 0;
-  transform: translate(-50,-50);
+  transform: translate(-50, -50);
   color: green;
   background-color: #2a3647;
   padding: 10px;
@@ -24,6 +24,7 @@ body {
   font-size: 14px;
   width: 200px;
 }
+
 .headerLogin {
   width: 100%;
   display: flex;
@@ -113,7 +114,7 @@ body {
   padding-left: 10px;
 }
 
-.invalidContainer  {
+.invalidContainer {
   margin: 0;
   height: 20px;
   display: flex;
@@ -297,6 +298,7 @@ body {
   left: 0;
   z-index: 9999;
 }
+
 .loginAllContentContainer {
   display: flex;
   align-items: center;
@@ -363,9 +365,11 @@ body {
   0% {
     opacity: 1;
   }
+
   99% {
     opacity: 0;
   }
+
   100% {
     visibility: hidden;
   }
@@ -376,6 +380,7 @@ body {
     left: 77px;
     top: 80px;
   }
+
   to {
     left: 50%;
     top: 50%;
@@ -397,17 +402,20 @@ body {
     top: 100px;
     left: 37%;
     right: 0;
-    transform: translate(-50,-50);
+    transform: translate(-50, -50);
   }
+
   #loginWindow {
     margin-top: 100px !important;
     width: 396px;
     height: 515px;
   }
+
   .inputIcon_container {
     width: 280px;
     height: 48px;
   }
+
   .loginInputField {
     width: 364px;
     height: 48px;
@@ -422,9 +430,11 @@ body {
   .headerLoginRight {
     display: none;
   }
+
   .signUpContentMobile {
     display: flex;
   }
+
   #signUpWindow {
     width: 396px;
     height: 595px;
@@ -434,6 +444,7 @@ body {
   #signUpArrowLeft {
     right: 330px;
   }
+
   .loginHeadline {
     font-size: 47px;
   }
@@ -443,56 +454,69 @@ body {
     height: 50.87px;
     margin-top: 30px;
   }
+
   .signUpContentMobile {
     margin-top: 10px;
   }
+
   .loginIcons {
     left: 250px;
   }
 }
 
 @media (max-width: 500px) {
+
   #successRegistration {
     top: 100px;
     left: 24%;
   }
+
   #signUpPasswordCheckText {
     margin: 0;
   }
+
   #loginWindow {
     width: 300px;
     height: 400px;
   }
+
   #signUpWindow {
     width: 300px;
     height: 470px;
     margin-top: 10px;
   }
+
   #signUpArrowLeft {
     height: 32px;
     width: 32px;
     right: 250px;
   }
+
   .SignUpPrivacy_container {
     margin-top: 0px;
     margin-bottom: 0px;
   }
+
   .loginIcons {
     left: 250px;
   }
+
   .loginHeadline {
     font-size: 22px;
   }
+
   .loginInputField {
     width: 280px;
     height: 38px;
-    
+
   }
+
   #loginButton {
     width: 90px;
     height: 38px;
     font-size: 16px;
   }
+
   #guestLoginButton {
     font-size: 16px;
     width: 120px;

@@ -1,24 +1,24 @@
 /* Custom Scrollbar */
 
 ::-webkit-scrollbar {
-    width: 10px;  
+    width: 10px;
     border-radius: 5px;
-  }
-  
-  ::-webkit-scrollbar-track {
-    background: #f1f1f1; 
-  }
-   
-  ::-webkit-scrollbar-thumb {
-    background: #c5c5c5; 
-    border-radius: 10px;
-  }
-  
-  ::-webkit-scrollbar-thumb:hover {
-    background: #555; 
-  }
+}
 
-/* End Custom Scrollbar */  
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c5c5c5;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* End Custom Scrollbar */
 
 .d-none {
     display: none !important;
@@ -77,7 +77,7 @@
     box-sizing: border-box;
 }
 
-.contact:hover, 
+.contact:hover,
 .contact-active {
     cursor: pointer;
     background-color: #2A3647;
@@ -85,7 +85,7 @@
 }
 
 .contact:hover .ctc-fullname,
-.contact-active .ctc-fullname{
+.contact-active .ctc-fullname {
     color: #fff;
 }
 

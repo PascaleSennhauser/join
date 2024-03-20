@@ -17,7 +17,7 @@
     .assigned-to-drop-down {
         max-height: 180px;
     }
-    
+
     /* Add-Task-Container */
 
     .add-task-container {
@@ -60,7 +60,7 @@
         padding-right: 50px;
         box-sizing: border-box;
         width: 100%;
-        background-color:#F6F7F8;
+        background-color: #F6F7F8;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -141,7 +141,7 @@
     }
 
     .assigned-to {
-      max-width: 100%;
+        max-width: 100%;
     }
 
     .a-t-input-container,
@@ -151,11 +151,11 @@
     }
 
     #assignedToInput,
-    #categoryInput, 
+    #categoryInput,
     #subtaskInput {
         width: 220px;
     }
-    
+
     .category-drop-down span {
         font-size: 16px;
     }
