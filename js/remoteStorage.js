@@ -3,7 +3,7 @@ const STORAGE_URL = 'https://remote-storage.developerakademie.org/item';
 
 
 /**
- * Stores a key-value pair in a remote storage
+ * Stores a key-value pair in a remote storage.
  * @param {String} key - The key under which the value is stored. 
  * @param {Any} value - The value to be stored. 
  * @returns {Promise<Object>} - The response from the server as a JSON object.

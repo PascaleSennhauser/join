@@ -1,5 +1,5 @@
 /**
- * This function creates a task and saves the task in the remote storage
+ * This function creates a task and saves the task in the remote storage.
  */
 async function createTask() {
     const inputFields = collectInputFields();
@@ -14,7 +14,7 @@ async function createTask() {
 
 
 /**
- * This function collects all the input fields
+ * This function collects all the values of the input fields.
  * @returns {{
  * title: string,
  * description: string,
@@ -22,24 +22,24 @@ async function createTask() {
  * category: string,
  * taskId: number,
  * priority: string,
- * progress: string,
- * }}
+ * progress: string
+ * }} - Returns the values of the input fields.
  */
 function collectInputFields() {
     let title = getField('titleInput').value;
     let description = document.getElementById('descriptionInput').value;
     let dueDate = document.getElementById('dateInput').value;
     let category = document.getElementById('categoryInput').value;
-    let taskId = gettingContactId();
+    let taskId = gettingTaskId();
     let priority = getPriority();
     let progress = getProgress();
 
-    return { title, description, dueDate, category, taskId, priority, progress};
+    return {title, description, dueDate, category, taskId, priority, progress};
 }
 
 
 /**
- * This function creates a task instance for pushing to the tasks-array
+ * This function creates a task instance for pushing to the tasks-array.
  * @param {{
  * title: string,
  * description: string,
@@ -48,9 +48,9 @@ function collectInputFields() {
  * taskId: number,
  * priority: string,
  * progress: string
- * }} param0 - The values to create the task
+ * }} param0 - The values of the input fields.
  * @returns {{
- * taskId: Array<number>,
+ * taskId: number,
  * title: string,
  * description: string,
  * category: string,
@@ -62,7 +62,7 @@ function collectInputFields() {
  * priority: string,
  * progress: string,
  * dueDate: string
- * }}
+ * }} - Returns the task-object.
  */
 function createTaskInstance({ title, description, dueDate, category, taskId, priority, progress}) {
     return {
@@ -80,9 +80,9 @@ function createTaskInstance({ title, description, dueDate, category, taskId, pri
 
 
 /**
- * This function controls if the description field is empty
- * @param {String} description - The description value
- * @returns {String} - The description value or an empty value
+ * This function controls if the description field is empty.
+ * @param {String} description - The description value.
+ * @returns {String} - The description value or an empty value.
  */
 function controlIfDescriptionEmtpy(description) {
     if (description == '') {
@@ -93,17 +93,17 @@ function controlIfDescriptionEmtpy(description) {
 
 
 /**
- * This function sets the new taskId
- * @returns {Number} - The new taskId
+ * This function sets the new taskId.
+ * @returns {Number} - The new taskId.
  */
-function gettingContactId() {
+function gettingTaskId() {
     return tasks.length + 1;
 }
 
 
 /**
- * This function gets the prio name
- * @returns {String} - The name of the prio 'urgent', 'medium', 'low' or empty
+ * This function gets the prio name.
+ * @returns {String} - The name of the prio 'urgent', 'medium', 'low' or empty.
  */
 function getPriority() {
         for (let i = 0; i < prioButtons.length; i++){
@@ -117,8 +117,8 @@ function getPriority() {
 
 
 /**
- * This function gets the current progress
- * @returns {String} - The name of the current progress 'todo', 'inprogress' or 'awaitfeedback'
+ * This function gets the current progress.
+ * @returns {String} - The name of the current progress 'todo', 'inprogress' or 'awaitfeedback'.
  */
 function getProgress() {
     if (currentProgress === '') {
@@ -130,7 +130,7 @@ function getProgress() {
 
 
 /**
- * This function gets the selected contacts as an array or an empty array
+ * This function gets the selected contacts as an array or an empty array.
  */
 function renderContactIds() {
     if (selectedContactsAssignedTo.length > 0) {
@@ -142,7 +142,7 @@ function renderContactIds() {
 
 
 /**
- * After the task is created, the board is shown with all the tasks
+ * After the task is created, the board is shown with all the tasks.
  */
 function goToBoard() {
     window.location.href = './board.html';

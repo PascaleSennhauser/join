@@ -1,5 +1,5 @@
 /**
- * This function opens the main pop-up-container
+ * This function opens the main pop-up-container.
  */
 function openPopUpContainer() {
     let popUp = document.getElementById('popUpAtContainer');
@@ -8,7 +8,7 @@ function openPopUpContainer() {
 
 
 /**
- * This function closes the main pop-up-container
+ * This function closes the main pop-up-container.
  */
 function closePopUpContainer() {
     let popUp = document.getElementById('popUpAtContainer');
@@ -17,8 +17,8 @@ function closePopUpContainer() {
 
 
 /**
- * This function removes the d-none of an element
- * @param {String} name - The id of the specific html element
+ * This function removes the d-none of an element.
+ * @param {String} name - The id of the specific html element.
  */
 function removeDNone(name) {
     let field = document.getElementById(name)
@@ -27,8 +27,8 @@ function removeDNone(name) {
 
 
 /**
- * This function adds the d-none to an element
- * @param {String} name - The id of the specific html element 
+ * This function adds the d-none to an element.
+ * @param {String} name - The id of the specific html element.
  */
 function addDNone(name) {
     let field = document.getElementById(name)
@@ -37,8 +37,8 @@ function addDNone(name) {
 
 
 /**
- * This function opens the pop-up to add a new task
- * @param {String} progress - This is the current progress 'todo', 'inprogress' or 'awaitfeedback'
+ * This function opens the pop-up to add a new task.
+ * @param {String} progress - This is the current progress 'todo', 'inprogress' or 'awaitfeedback'.
  */    
 async function openPopUpAt(progress) {
     await getItem('tasks');
@@ -53,7 +53,7 @@ async function openPopUpAt(progress) {
 
 
 /**
- * This function closes the pop-up to add a new task
+ * This function closes the pop-up to add a new task.
  */
 function closePopUpAt() {
     clearTask();
@@ -65,8 +65,8 @@ function closePopUpAt() {
 
 
 /**
- * This function opens the pop-up, when you click on a specific task on the board
- * @param {Number} id - This is the taskid of the task you click on
+ * This function opens the pop-up, when you click on a specific task on the board.
+ * @param {Number} id - This is the taskid of the task you click on.
  */
 async function openTaskBig(id) {
     await getTasksFromServer();
@@ -82,9 +82,9 @@ async function openTaskBig(id) {
 
 
 /**
- * This function gets the index by the taskid
- * @param {Number} id - This is the taskid of the task you click on
- * @returns The index of the task gets returned or null
+ * This function gets the index by the taskid.
+ * @param {Number} id - This is the taskid of the task you click on.
+ * @returns {Number|null} - The index of the task gets returned or null.
  */
 function getIndexById(id) {
     const index = tasks.findIndex(function(task) {
@@ -100,10 +100,10 @@ function getIndexById(id) {
 
 
 /**
- * This runction renders the information for the task-pop-up
- * @param {HTMLElement} popUp - This is the html element for a white canvas of the pop-up-task 
- * @param {Object} currentTask - task object
- * @param {Number} index - This is the index of the current task
+ * This runction renders the information for the task-pop-up.
+ * @param {HTMLElement} popUp - This is the html element for a white canvas of the pop-up-task. 
+ * @param {Object} currentTask - task object.
+ * @param {Number} index - This is the index of the current task.
  */
 function renderAlInformationsTaskBig(popUp, currentTask, index) {
     popUp.innerHTML += renderPopUpCardTask(currentTask, index);
@@ -117,10 +117,10 @@ function renderAlInformationsTaskBig(popUp, currentTask, index) {
 
 
 /**
- * This is the html-template for to fill in the pop-up
- * @param {Object} currentTask - task object
- * @param {Number} index - This is the index of the current task
- * @returns The html-template gets returned
+ * This is the html-template for to fill in the pop-up.
+ * @param {Object} currentTask - task object.
+ * @param {Number} index - This is the index of the current task.
+ * @returns {HTMLTemplateElement} - The html-template gets returned.
  */
 function renderPopUpCardTask(currentTask, index) {
     return /*html*/`
@@ -160,8 +160,8 @@ function renderPopUpCardTask(currentTask, index) {
 
 
 /**
- * The background color of the specific category
- * @param {Object} currentTask - task object
+ * The background color of the specific category.
+ * @param {Object} currentTask - The task object.
  */
 function renderColorsCategoryPu(currentTask) {
     let currentCategory = currentTask['category'];
@@ -177,8 +177,8 @@ function renderColorsCategoryPu(currentTask) {
 
 
 /**
- * Renders the description part, when there is a description and when not
- * @param {Object} currentTask - task object
+ * Renders the description part, when there is a description and when not.
+ * @param {Object} currentTask - The task object.
  */
 function renderDescriptionPu(currentTask) {
     let description = document.getElementById(`puBigDescription`);
@@ -192,8 +192,8 @@ function renderDescriptionPu(currentTask) {
 
 
 /**
- * The date gets shown in the correct format
- * @param {Object} currentTask - task object
+ * The date gets shown in the correct format.
+ * @param {Object} currentTask - The task object.
  */
 function renderDueDatePu(currentTask) {
     let dueDateBig = document.getElementById(`dueDatePuBig`);
@@ -205,8 +205,8 @@ function renderDueDatePu(currentTask) {
 
 
 /**
- * The priority is shown or not
- * @param {Object} currentTask - task object
+ * The priority is shown or not.
+ * @param {Object} currentTask - The task object.
  */
 function renderPrioPu(currentTask) {
     let prioBig = document.getElementById(`priorityPuBig`);
@@ -225,8 +225,8 @@ function renderPrioPu(currentTask) {
 
 
 /**
- * The selected contacts are shown
- * @param {Object} currentTask - task object
+ * The selected contacts are shown.
+ * @param {Object} currentTask - The task object.
  */
 function renderassignedToPu(currentTask) {
     let puBigContacts = document.getElementById(`puBigContacts`);
@@ -237,10 +237,10 @@ function renderassignedToPu(currentTask) {
 
 
 /**
- * The ifElse-statement to show contacts if existing
- * @param {HTMLElement} puBigContacts - The html-container of the contacts
- * @param {HTMLElement} assignedToTitle - The html element of the assignedTo-title
- * @param {Object} currentTask - task object
+ * The ifElse-statement to show contacts if existing.
+ * @param {HTMLElement} puBigContacts - The html-container of the contacts.
+ * @param {HTMLElement} assignedToTitle - The html element of the assignedTo-title.
+ * @param {Object} currentTask - The task object.
  */
 function ifElseToShowContacts(puBigContacts, assignedToTitle, currentTask) {
     if (currentTask['contactids'].length !== 0) {
@@ -259,9 +259,9 @@ function ifElseToShowContacts(puBigContacts, assignedToTitle, currentTask) {
 
 
 /**
- * This function gets all selected contacts from the array
- * @param {Number} contactid - The id of the contact 
- * @returns If returns all the selected contacts or null
+ * This function gets all selected contacts from the array.
+ * @param {Number} contactid - The id of the contact.
+ * @returns {Number|null} - If returns all the selected contacts or null.
  */
 function getContactPu(contactid) {
     for (let j = 0; j < contacts.length; j++) {
@@ -274,10 +274,10 @@ function getContactPu(contactid) {
 
 
 /**
- * The if-else-part, when there are contacts or no contacts
- * @param {Number} indexContact - The index of the contact
- * @param {HTMLElement} puBigContacts - The html element of the id puBigContacts
- * @param {Number} i - The index of the current contactId
+ * The if-else-part, when there are contacts or no contacts.
+ * @param {Number} indexContact - The index of the contact.
+ * @param {HTMLElement} puBigContacts - The html element of the id puBigContacts.
+ * @param {Number} i - The index of the current contactId.
  */
 function ifElseContact(indexContact, puBigContacts, i) {
     if (indexContact !== null) {
@@ -298,9 +298,9 @@ function ifElseContact(indexContact, puBigContacts, i) {
 
 
 /**
- * This runction renders the background color of the initials
- * @param {String} initials - Those are the initials as a string
- * @param {Number} i - The index of the current contactId
+ * This runction renders the background color of the initials.
+ * @param {String} initials - Those are the initials as a string.
+ * @param {Number} i - The index of the current contactId.
  */
 function renderBackgroundColorOverlay(initials, i) {
     let firstLetter = initials.charAt(0).toLowerCase();
@@ -310,9 +310,9 @@ function renderBackgroundColorOverlay(initials, i) {
 
 
 /**
- * This is the function to render the subtasks in the overaly
- * @param {Object} currentTask - task object
- * @param {Number} index - This is the index of the current task
+ * This is the function to render the subtasks in the overaly.
+ * @param {Object} currentTask - The task object.
+ * @param {Number} index - This is the index of the current task.
  */
 function renderSubtasksPu(currentTask, index) {
     let subtasksBigContainer = document.getElementById(`puBigSubtasksContainer`);
@@ -329,10 +329,10 @@ function renderSubtasksPu(currentTask, index) {
 
 
 /**
- * For-loop to get all the subtasks
- * @param {Object} currentTask - task object
- * @param {HTMLElement} subtasksBigContainer - This is html element of the subtasks container
- * @param {Number} index - This is the index of the current task
+ * For-loop to get all the subtasks.
+ * @param {Object} currentTask - The task object.
+ * @param {HTMLElement} subtasksBigContainer - This is html element of the subtasks container.
+ * @param {Number} index - This is the index of the current task.
  */
 function getSubtasksPu(currentTask, subtasksBigContainer, index) {
     for (let i = 0; i < currentTask['subtasks'].length; i++) {
@@ -350,9 +350,9 @@ function getSubtasksPu(currentTask, subtasksBigContainer, index) {
 
 
 /**
- * The value of the isToggled vairaible gets changed and the image in the input gets changed
- * @param {Number} i - The index of the subtask
- * @param {Number} index - The index of the task
+ * The value of the isToggled vairaible gets changed and the image in the input gets changed.
+ * @param {Number} i - The index of the subtask.
+ * @param {Number} index - The index of the task.
  */
 function renderFinishedSubtaskPu(i, index) {
     let currentTask = tasks[index];
@@ -363,9 +363,9 @@ function renderFinishedSubtaskPu(i, index) {
 
 
 /**
- * This function renders the check-button if the task gets opened
- * @param {Number} i - The index of the subtask
- * @param {Object} currentSubtask - subtask object
+ * This function renders the check-button if the task gets opened.
+ * @param {Number} i - The index of the subtask.
+ * @param {Object} currentSubtask - The subtask object.
  */
 function renderCheckedSubtaskPu(i, currentSubtask) {
     renderCheckImage(currentSubtask, i);
@@ -373,9 +373,9 @@ function renderCheckedSubtaskPu(i, currentSubtask) {
 
 
 /**
- * This function toggles the check-image
- * @param {Object} currentSubtask - subtask object
- * @param {Number} i - The index of the subtask
+ * This function toggles the check-image.
+ * @param {Object} currentSubtask - The subtask object.
+ * @param {Number} i - The index of the subtask.
  */
 function renderCheckImage(currentSubtask, i) {
     let currentSubtaskImg = document.getElementById(`subtaskImg${i}`);
@@ -388,8 +388,8 @@ function renderCheckImage(currentSubtask, i) {
 
 
 /**
- * This function deletes the task
- * @param {Number} index - The index of the task
+ * This function deletes the task.
+ * @param {Number} index - The index of the task.
  */
 async function deleteTask(index) {
     tasks.splice(index, 1);
@@ -399,7 +399,7 @@ async function deleteTask(index) {
 
 
 /**
- * This function closes the task-pop-up
+ * This function closes the task-pop-up.
  */
 async function closeTaskBig() {
     await setItem('tasks', tasks);
@@ -414,7 +414,7 @@ async function closeTaskBig() {
 
 
 /**
- * This function clears the input fields after closing the task to prepare for the new task, which gets opened
+ * This function clears the input fields after closing the task to prepare for the new task, which gets opened.
  */
 function clearInputFieldsTaskBig() {
     getField('titleInputEdit').value = '';

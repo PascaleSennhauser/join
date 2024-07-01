@@ -1,7 +1,11 @@
 // renderfunctions:
 
+/**
+ * This function renders the sign up window.
+ * @returns {HTMLTemplateElement} - Returns the html-template of the sign-up-window. 
+ */
 function renderSignUpWindow() {
-    return `
+    return /*html*/`
       <div id="signUpWindow">
         <h1 class="loginHeadline">Sign up</h1>
         <hr class="dividerSolid">
@@ -36,8 +40,13 @@ function renderSignUpWindow() {
       `;
   }
   
+
+  /**
+   * This function renders the login-template.
+   * @returns {HTMLTemplateElement} - Returns the html-template of the login.
+   */
   function renderLogin() {
-    return `
+    return /*html*/`
       <div class="login_container" id="loginContentContainer">
       <div id="loginWindow">
         <h1 class="loginHeadline">Log in</h1>
@@ -79,11 +88,13 @@ function renderSignUpWindow() {
       `;
   }
   
-//   summary:
 
+/**
+ * This function renders the summary page.
+ * @returns {HTMLTemplateElement} - Returns the html-template of the summary page.
+ */
 function renderSummaryPageHtml() {
-    return ` 
-   
+    return /*html*/`    
    <div class="summaryHeader">
        <h1 class="summaryHeadline">Join 360</h1>
        <div class="dividerSummaryHeader"></div> 

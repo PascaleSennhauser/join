@@ -1,6 +1,6 @@
 /**
  * This function fetch and renders HTML templates given by HTML tag.
- * Add this inside the HTML tag: w3-include-html="./templates/sidebar_template.html"
+ * Add this inside the HTML tag: w3-include-html="./templates/sidebar_template.html".
  */
 async function includeHTML() {
     let includeElements = document.querySelectorAll('[w3-include-html]');

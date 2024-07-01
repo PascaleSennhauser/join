@@ -2,11 +2,12 @@ let contacts = [];
 let letterFilters = [];
 let activeContact;
 
+
 /**
- * This runs on body onload
- * Renders External HTML templates
- * Fetch Contacts from Server and stores in contacts Array
- * Renders Contacts List based on contacts Array
+ * This runs on body onload.
+ * Renders External HTML templates.
+ * Fetch Contacts from Server and stores in contacts Array.
+ * Renders Contacts List based on contacts Array.
  */
 async function init() {
   await includeHTML();
@@ -14,8 +15,9 @@ async function init() {
   renderContactList();
 }
 
+
 /**
- * Fetch contacts from Server and loads into contacts Array
+ * Fetch contacts from Server and loads into contacts Array.
  */
 async function fetchContacts() {
   //const contacts = await fetch('./assets/json/contacts.json');
@@ -26,16 +28,18 @@ async function fetchContacts() {
   }
 }
 
+
 /**
- * Clears the innerHTML of a HTML Element 
- * @param {String} Id Represents the Id of the HTML Object
+ * Clears the innerHTML of a HTML Element .
+ * @param {String} Id - Represents the Id of the HTML Object.
  */
 function clearId(id) {
   document.getElementById(id).innerHTML = '';
 }
 
+
 /**
- * This renders complete HTML to list all the contacts
+ * This renders complete HTML to list all the contacts.
  */
 function renderContactList() {
   clearId('contacts-list');
@@ -44,15 +48,17 @@ function renderContactList() {
   renderLetterAndContacts();
 }
 
+
 /**
- * This sorts the letters from Array letterFilters alphabetically
+ * This sorts the letters from Array letterFilters alphabetically.
  */
 function sortLettersByAlphabet() {
   letterFilters.sort();
 }
 
+
 /**
- * This loops through the sorted letter filters and inside each it renders the contacts which belongs into it
+ * This loops through the sorted letter filters and inside each it renders the contacts which belongs into it.
  */
 function renderLetterAndContacts() {
   letterFilters.forEach((letter) => {
@@ -61,9 +67,10 @@ function renderLetterAndContacts() {
   });
 }
 
+
 /**
- * This adds the innerHTML of a given letter
- * @param {String} Letter This represents the sorting letter needed to divide the contacts in the list 
+ * This adds the innerHTML of a given letter.
+ * @param {String} Letter This represents the sorting letter needed to divide the contacts in the list .
  */
 function renderLetterHtml(letter) {
   document.getElementById("contacts-list").innerHTML += `
@@ -71,9 +78,10 @@ function renderLetterHtml(letter) {
     `;
 }
 
+
 /**
- * This filters the contacts starting with the given letter and submit them to renderContactHtml(contact)
- * @param {String} Letter Letter to filter the contacts Array by First Name 
+ * This filters the contacts starting with the given letter and submit them to renderContactHtml(contact).
+ * @param {String} Letter Letter to filter the contacts Array by First Name.
  */
 function renderContacts(letter) {
   contacts.forEach((contact) => {
@@ -83,9 +91,10 @@ function renderContacts(letter) {
   });
 }
 
+
 /**
  * This helper function updates the letterFilters Array and loops through contacts
- * and adds the first Char from Firstname, as well removing duplicates
+ * and adds the first Char from Firstname, as well removing duplicates.
  */
 function defineFirstLetters() {
   letterFilters = [];
@@ -97,10 +106,11 @@ function defineFirstLetters() {
   });
 }
 
+
 /**
- * This is used when onclick Event fired on a contact
- * @param {String} Id contactid of the Contact where has been clicked
- * Handles some styling as well
+ * This is used when onclick Event fired on a contact.
+ * @param {String} Id - Contactid of the Contact where has been clicked.
+ * Handles some styling as well.
  */
 function showContactDetail(id) {
   const contact = contacts.find((ct) => ct.contactid == id);
@@ -110,10 +120,11 @@ function showContactDetail(id) {
   handleMobileView();
 }
 
+
 /**
- * This highlights the contact when is active and has been clicked (not on Mobile)
- * @param {String} Id The element Id
- * @returns 
+ * This highlights the contact when is active and has been clicked (not on Mobile).
+ * @param {String} Id - The element Id.
+ * @returns {void}
  */
 function highlightContact(id) {
   if (activeContact && isMobile()) {
@@ -127,9 +138,10 @@ function highlightContact(id) {
   activeContact = id;
 }
 
+
 /**
- * This function removes the highlight from an element
- * @param {String} Id Element Id 
+ * This function removes the highlight from an element.
+ * @param {String} Id - Element Id.
  */
 function removeHighlight(id) {
   if (id) {
@@ -140,10 +152,11 @@ function removeHighlight(id) {
   }
 }
 
+
 /**
- * This fetches the background Color of an Element with given Id
- * @param {String} Id Id of the Element
- * @returns {String} Return backGroundColor of the Element
+ * This fetches the background Color of an Element with given Id.
+ * @param {String} Id - Id of the Element.
+ * @returns {String} - Return backGroundColor of the Element.
  */
 function getBackgroundColor(id) {
   let bgColor;
@@ -156,13 +169,13 @@ function getBackgroundColor(id) {
   return bgColor;
 }
 
+
 /**
- * This renders the Html of a contact Object
- * @param {Object} Contact Receives a contact object from the contacts array 
+ * This renders the Html of a contact Object.
+ * @param {Object} Contact - Receives a contact object from the contacts array.
  */
 function renderContactHtml(contact) {
   document.getElementById("contacts-list").innerHTML += `
-        
             <div class="contact" id="contact-${contact.contactid}" onclick="showContactDetail(${contact.contactid})">
                 <div class="ctc-logo">${contact.initials}</div>
                 <div class="ctc-details">
@@ -174,13 +187,14 @@ function renderContactHtml(contact) {
     `;
 }
 
+
 /**
- * This renders the Html of a Contact in Detail View
- * @param {Object} contact Object of the contacts Array
- * @param {String} color backgroundColor from the Element (Actually set random by selectors in CSS)
+ * This renders the Html of a Contact in Detail View.
+ * @param {Object} contact - Object of the contacts Array.
+ * @param {String} color - backgroundColor from the Element (Actually set random by selectors in CSS).
  */
 function renderContactDetail(contact, color) {
-  document.getElementById("contact-detail").innerHTML = `
+  document.getElementById("contact-detail").innerHTML = /*html*/`
             <div class="contacts-main-header cmh-mobile">
                 <div class="cmh-left">
                     <div class="cmh-logo-big cmh-logo-big-mobile" style="background-color:${color}">${contact.initials}</div>

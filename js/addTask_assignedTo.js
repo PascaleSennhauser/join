@@ -123,7 +123,7 @@ function renderInitialsSelected() {
  * This is the template to show the contacts in the dropdown.
  * @param {Object} contact - This is the array of a specific contact.
  * @param {Number} i - This is the index of the contact. 
- * @returns The html-template gets returned.
+ * @returns {HTMLTemplateElement} - The html-template gets returned.
  */
 function assignedToContactsTemplate(contact, i) {
     return /*html*/`

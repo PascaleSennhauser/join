@@ -1,25 +1,28 @@
 let from;
 let to;
 
+
 /* Drag and Drop Logic */
 /**
  * This is run when an object is dragged over a draggalble area and highlight thiis one.
- * @param {Object} Event Browser Event
- * @param {String} ID This represents the id from the container where an object has ben dragged to 
+ * @param {Object} Event - Browser Event.
+ * @param {String} ID - This represents the id from the container where an object has ben dragged to. 
  */
 function allowDrop(ev, id) {
     ev.preventDefault();
     document.getElementById(id).classList.add('dragover-active');
 }
 
+
 /**
- * This removes the highlight from the Container with the given id
- * @param {String} ID This represents the id from a container
- * Used for remove the highlight from the container when an object has been dropped successfully 
+ * This removes the highlight from the Container with the given id.
+ * @param {String} ID - This represents the id from a container.
+ * Used for remove the highlight from the container when an object has been dropped successfully. 
  */
 function removeHighlight(id) {
     document.getElementById(id).classList.remove('dragover-active');
 }
+
 
 /**
  * This enables the drag method on a HTML Element and initiates the drag operation

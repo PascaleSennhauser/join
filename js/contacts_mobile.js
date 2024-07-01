@@ -1,7 +1,8 @@
 let menuOpen = false;
 
+
 /**
- * This hides the Contacts Detail Container on Mobile so the contact List is visible (for Back Arrow)
+ * This hides the Contacts Detail Container on Mobile so the contact List is visible (for Back Arrow).
  */
 function hideMobileDetailView() {
     if (isMobile()) {
@@ -10,8 +11,9 @@ function hideMobileDetailView() {
     }
 }
 
+
 /**
- * This hides the Contact List on Mobile ad shows the Details Page
+ * This hides the Contact List on Mobile ad shows the Details Page.
  */
 function handleMobileView() {
     if (isMobile()) {
@@ -20,9 +22,10 @@ function handleMobileView() {
     }
 }
 
+
 /**
- * This show the mobile Menu when clicked on the dots icon
- * @param {Object} event 
+ * This show the mobile Menu when clicked on the dots icon.
+ * @param {Object} event - The form validation event.
  */
 function renderContactDetailMenu(event) {
     event.stopPropagation();
@@ -31,8 +34,9 @@ function renderContactDetailMenu(event) {
     menuOpen = true;
 }
 
+
 /**
- * This closes the small Menu on the Contact Detail Page rendered only on Mobile, when clicked outside
+ * This closes the small Menu on the Contact Detail Page rendered only on Mobile, when clicked outside.
  */
 function closeMenu() {
     if (menuOpen) {

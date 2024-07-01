@@ -64,7 +64,7 @@ function renderContactsAssignedToEdit() {
  * This is the template to show the contacts in the dropdown in the edit-form.
  * @param {Object} contact - This is the array of a specific contact.
  * @param {Number} i - This is the index of the contact.
- * @returns The html-template gets returned.
+ * @returns {HTMLTemplateElement} - The html-template gets returned.
  */
 function assignedToContactsTemplateEdit(contact, i) {
     return /*html*/`

@@ -1,7 +1,7 @@
 let currentSubtaskFocus;
 
 /**
- * This function sets the focus on the subtask container
+ * This function sets the focus on the subtask container.
  */
 function inputSubtaskFocus() {
     addFocusToContainer('subtaskContainer');
@@ -9,7 +9,7 @@ function inputSubtaskFocus() {
 
 
 /**
- * This function removes the focus on the subtask container
+ * This function removes the focus on the subtask container.
  */
 function inputSubtaskBlur() {
     removeFocusToContainer('subtaskContainer');
@@ -17,7 +17,7 @@ function inputSubtaskBlur() {
 
 
 /**
- * This function gets rendered, when you write in the subtask input field
+ * This function gets rendered, when you write in the subtask input field.
  */
 function inputSubtask() {
     let subtask = getField('subtaskInput').value;
@@ -26,8 +26,8 @@ function inputSubtask() {
 
 
 /**
- * The images in the input field change, when you have text in the input field
- * @param {String} subtask - This is the value of the subtask input
+ * The images in the input field change, when you have text in the input field.
+ * @param {String} subtask - This is the value of the subtask input.
  */
 function renderInputSubtaskImg(subtask) {
     let insertSubtaskToolContainer = getField('insertSubtaskToolContainer');
@@ -43,7 +43,7 @@ function renderInputSubtaskImg(subtask) {
 
 
 /**
- * This function deletes the value of the subtask input
+ * This function deletes the value of the subtask input.
  */
 function deleteInputSubtask() {
     let input = getField('subtaskInput');
@@ -53,7 +53,7 @@ function deleteInputSubtask() {
 
 
 /**
- * This function adds the subtask in the list under the subtask-input-field,, when clicking on the plus-image
+ * This function adds the subtask in the list under the subtask-input-field,, when clicking on the plus-image.
  */
 function addSubtask() {
     let input = getField('subtaskInput');
@@ -72,7 +72,7 @@ function addSubtask() {
 
 
 /**
- * This function shows the added subtasks under the subtask-input-field
+ * This function shows the added subtasks under the subtask-input-field.
  */
 function renderSubtasks() {
     currentSubtaskFocus = 0;
@@ -90,9 +90,9 @@ function renderSubtasks() {
 
 
 /**
- * This is the subtask-template to show the added subtasks
- * @param {Number} i - This is the index of the added subtask
- * @returns The html-template gets returned
+ * This is the subtask-template to show the added subtasks.
+ * @param {Number} i - This is the index of the added subtask.
+ * @returns {HTMLTemplateElement} - The html-template gets returned.
  */
 function returnSubtaskTemplate(i) {
     return /*html*/`
@@ -117,9 +117,9 @@ function returnSubtaskTemplate(i) {
 
 
 /**
- * This function is for edditing a subtask, when you click on the edit-image
- * @param {Event} event - This is the event of the event listener
- * @param {Number} i - This is the index of the current subtask
+ * This function is for edditing a subtask, when you click on the edit-image.
+ * @param {Event} event - This is the event of the event listener.
+ * @param {Number} i - This is the index of the current subtask.
  */
 function inputAddedSubtaskFocusClickOnImg(event, i) {
     event.stopPropagation();
@@ -131,8 +131,8 @@ function inputAddedSubtaskFocusClickOnImg(event, i) {
 
 
 /**
- * When you doubleclick on the subtask this function gets rendered or when you click on edit-image
- * @param {Number} i - This is the index of the added subtask
+ * When you doubleclick on the subtask this function gets rendered or when you click on edit-image.
+ * @param {Number} i - This is the index of the added subtask.
  */
 function inputAddedSubtaskFocus(i) {
     let addedSubtaskContainer = getField(`addedSubtaskContainer${i}`);
@@ -145,10 +145,10 @@ function inputAddedSubtaskFocus(i) {
 
 
 /**
- * This function changes the tool-images
- * @param {Number} i - This is the index of the added subtask
- * @param {HTMLElement} toolsFocus - HTML element of the focus tools
- * @param {HTMLElement} toolsNoFocus - HTML element of the no focus tools
+ * This function changes the tool-images.
+ * @param {Number} i - This is the index of the added subtask.
+ * @param {HTMLElement} toolsFocus - HTML element of the focus tools.
+ * @param {HTMLElement} toolsNoFocus - HTML element of the no focus tools.
  */
 function getTools(i, toolsFocus, toolsNoFocus) {
     let currentToolsNoFocus = getField(`${toolsNoFocus}${i}`);
@@ -159,8 +159,8 @@ function getTools(i, toolsFocus, toolsNoFocus) {
 
 
 /**
- * This function sets the cursor at the end of the subtask, so you can edit it
- * @param {Number} i - This is the index of the added subtask
+ * This function sets the cursor at the end of the subtask, so you can edit it.
+ * @param {Number} i - This is the index of the added subtask.
  */
 function setFocus(i) {
     let input = getField(`addedSubtask${i}`);
@@ -171,7 +171,7 @@ function setFocus(i) {
 
 
 /**
- * This EventListener renders the subtasks when you click outside an added subtask
+ * This EventListener renders the subtasks when you click outside an added subtask.
  */
 document.addEventListener('click', function(event) {
     for (let i = 0; i < subtasks.length; i++) {
@@ -187,8 +187,8 @@ document.addEventListener('click', function(event) {
 
 
 /**
- * If you click outside the current subtask, the background color and images change back to no focus
- * @param {Number} i - This is the index of the added subtask
+ * If you click outside the current subtask, the background color and images change back to no focus.
+ * @param {Number} i - This is the index of the added subtask.
  */
 function inputAddedSubtaskBlur(i) {
         let addedSubtaskContainer = getField(`addedSubtaskContainer${i}`);
@@ -207,8 +207,8 @@ function inputAddedSubtaskBlur(i) {
 
 
 /**
- * Whe you click on the bin image in the added subtask, you delete the subtask
- * @param {Number} i - This is the index of the added subtask
+ * Whe you click on the bin image in the added subtask, you delete the subtask.
+ * @param {Number} i - This is the index of the added subtask.
  */
 function deleteAddedSubtask(i) {
     subtasks.splice(i, 1);
@@ -217,8 +217,8 @@ function deleteAddedSubtask(i) {
 
 
 /**
- * If you click on the check image, you save the editted subtask
- * @param {Number} i - This is the index of the added subtask
+ * If you click on the check image, you save the editted subtask.
+ * @param {Number} i - This is the index of the added subtask.
  */
 function saveAddedSubtask(i) {
     subtasks[i]['name'] = getField(`addedSubtask${i}`).value;
