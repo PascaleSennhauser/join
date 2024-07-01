@@ -3,6 +3,7 @@ let to;
 
 
 /* Drag and Drop Logic */
+
 /**
  * This is run when an object is dragged over a draggalble area and highlight thiis one.
  * @param {Object} Event - Browser Event.
@@ -26,8 +27,8 @@ function removeHighlight(id) {
 
 /**
  * This enables the drag method on a HTML Element and initiates the drag operation
- * setData sets the data to be transferred (format, data represented by id)
- * @param {Object} Event The Event Object
+ * setData sets the data to be transferred (format, data represented by id).
+ * @param {Object} Event - The Event Object.
  */
 function drag(ev) {
     ev.dataTransfer.setData("text", ev.target.id);
@@ -35,9 +36,9 @@ function drag(ev) {
 
 
 /**
- * This drops the element to the given container and removes the highlight class
- * @param {Object} Event Event Object associated with the Drop Object (coordinates, data etc.)
- * @param {String} ID ID of the container where the object need to be dropped in 
+ * This drops the element to the given container and removes the highlight class.
+ * @param {Object} Event - Event Object associated with the Drop Object (coordinates, data etc.).
+ * @param {String} ID - ID of the container where the object need to be dropped in. 
  */
 function drop(ev, id) {
     ev.preventDefault();

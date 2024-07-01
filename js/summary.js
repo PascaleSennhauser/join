@@ -6,12 +6,16 @@ let finalinitals;
 
 
 /**
- * This function gets the data of the tasks
+ * This function gets the data of the tasks from the remote storage.
  */
 async function getTaskData() {
   currentStatusTasks = JSON.parse(await getItem("tasks"));
 }
 
+
+/**
+ * This function gets all the information for the summary.
+ */
 async function initSummary() {
   await includeHTML();
   let renderContainer = document.getElementById("summaryContent_container");
@@ -32,6 +36,10 @@ async function initSummary() {
   changeDateUrgentTask();
 }
 
+
+/**
+ * This function changes the greeting message.
+ */
 function changeGreetingMessage() {
   let changeMessage = document.getElementById("greetUserHeadline");
   if (currentHour < 12) {
@@ -43,14 +51,20 @@ function changeGreetingMessage() {
   }
 }
 
-//get current loggedin User from Array stored in local Storage:
 
+/**
+ * This function gets the current logged in user from the array stored in the local storage.
+ */
 function getCurrentLoggedInUser() {
   let greetUser = document.getElementById("greetUserName");
   let userData = JSON.parse(localStorage.getItem("userName"));
   greetUser.innerHTML = `${userData}`;
 }
 
+
+/**
+ * This function getsd the initials from the user name.
+ */
 function getInitialsFromUserName() {
   let userData = JSON.parse(localStorage.getItem("userName"));
   let dataInString = userData[0];
@@ -58,6 +72,10 @@ function getInitialsFromUserName() {
   finalinitals = initials.toUpperCase();
 }
 
+
+/**
+ * This function changes the initials for the current user.
+ */
 function changeInitialsCurrentUser() {
   getInitialsFromUserName();
   let guestUserLoggedIn = JSON.parse(localStorage.getItem("guest"));
@@ -69,6 +87,10 @@ function changeInitialsCurrentUser() {
   }
 }
 
+
+/**
+ * This function checks if the user is logged in.
+ */
 function checkIfUserIsLoggedin() {
   let guestUserLoggedIn = JSON.parse(localStorage.getItem("guest"));
   if (guestUserLoggedIn === true) {
@@ -79,6 +101,10 @@ function checkIfUserIsLoggedin() {
   }
 }
 
+
+/**
+ * This function changes the icon in the header to the guest icon.
+ */
 function changeHeaderUserIconGuest() {
   let initialsDiv = document.querySelector(".header-profile-icon");
   let initialsDivMobile = document.getElementById("currentUserinHeader");
@@ -86,6 +112,10 @@ function changeHeaderUserIconGuest() {
   initialsDivMobile.innerHTML = "GU";
 }
 
+
+/**
+ * This function changes the icon in the header to the logged in user.
+ */
 function changeHeaderUserIconLoggedIn() {
   let initialsDiv = document.querySelector(".header-profile-icon");
   let initialsDivMobile = document.getElementById("currentUserinHeader");
@@ -93,8 +123,10 @@ function changeHeaderUserIconLoggedIn() {
   initialsDivMobile.innerHTML = finalinitals;
 }
 
-// change Summary Data
 
+/**
+ * This function is to set the current todos.
+ */
 async function changeCurrentTodos() {
   await getTaskData();
   let todoCount = currentStatusTasks.filter(
@@ -105,6 +137,10 @@ async function changeCurrentTodos() {
   currentToDo.innerHTML = todoCount;
 }
 
+
+/**
+ * This function is to set the tasks in progress.
+ */
 async function changeTaskInProgress() {
   await getTaskData();
   let taskInProgressCount = currentStatusTasks.filter(
@@ -115,6 +151,10 @@ async function changeTaskInProgress() {
   taskInProgress.innerHTML = taskInProgressCount;
 }
 
+
+/**
+ * This function is to set the tasks done.
+ */
 async function changeTaskDone() {
   await getTaskData();
   let taskDoneCount = currentStatusTasks.filter(
@@ -125,6 +165,10 @@ async function changeTaskDone() {
   tasksDone.innerHTML = taskDoneCount;
 }
 
+
+/**
+ * This function is to set the urgent tasks.
+ */
 async function changeUrgentTasks() {
   await getTaskData();
   let taskUrgentCount = currentStatusTasks.filter(
@@ -135,6 +179,10 @@ async function changeUrgentTasks() {
   tasksUrgent.innerHTML = taskUrgentCount;
 }
 
+
+/**
+ * This function is to set the awaitng feedback tasks.
+ */
 async function changeAwaitingFeedbackTasks() {
   await getTaskData();
   let awaitingFeedbackTasksCount = currentStatusTasks.filter(
@@ -145,6 +193,10 @@ async function changeAwaitingFeedbackTasks() {
   tasksAwaitingFeedback.innerHTML = awaitingFeedbackTasksCount;
 }
 
+
+/**
+ * This function is to set the tasks in the board.
+ */
 async function changeTaskInBoard() {
   await getTaskData();
   let allCurrentTasks = currentStatusTasks.length;
@@ -152,6 +204,10 @@ async function changeTaskInBoard() {
   allCurrentTaskContainer.innerHTML = allCurrentTasks;
 }
 
+
+/**
+ * This function is to set the date of the most urgent task.
+ */
 async function changeDateUrgentTask() {
   let dateContainer = document.getElementById("deadlineToDoDate");
   arrayData = JSON.parse(await getItem("tasks"));
@@ -182,12 +238,22 @@ async function changeDateUrgentTask() {
   }
 }
 
-// Hilfsfunktion zum Check ob das Datum auch gültig ist
+
+/**
+ * This function checks if the date is valid.
+ * @param {Date} date - The date.
+ * @returns {Boolean} - Returns true if the date is valid, otherwise false.
+ */
 function isValidDate(date) {
   return date instanceof Date && !isNaN(date);
 }
 
-// Hilfsfunktion zur Suche des nächsten gültigen Datums im dateOnlyArray
+
+/**
+ * This function looks for the next valid date.
+ * @param {Array<date>} dateOnlyArray - The array with the dates of the tasks.
+ * @returns {Date | null} - Returns the valid date or null.
+ */
 function findNextValidDate(dateOnlyArray) {
   for (let i = 1; i < dateOnlyArray.length; i++) {
     if (isValidDate(dateOnlyArray[i].duedate)) {

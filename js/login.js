@@ -2,6 +2,10 @@ let users = [];
 let loggedInUser =[];
 let guestLoggedIn = false;
 
+
+/**
+ * This function registers a new user.
+ */
 async function register() {
   let form = document.getElementById('SignUpForm');
   let mailInput = document.getElementById("registerMailInput");
@@ -24,10 +28,18 @@ async function register() {
   goBackToLoginAfterSignUp();
 }
 
+
+/**
+ * This function loads all the users.
+ */
 async function initUsers() {
   await loadUsers();
 }
 
+
+/**
+ * This function loads the users from the remote storage.
+ */
 async function loadUsers(){
   try {
       users = JSON.parse(await getItem('users'));
@@ -36,6 +48,10 @@ async function loadUsers(){
   }
 }
 
+
+/**
+ * This function checks if the login is valid.
+ */
 async function checkLogin() {
   event.preventDefault();
   guestLoggedIn = false;
@@ -52,50 +68,70 @@ async function checkLogin() {
   }
 }
 
+
+/**
+ * This function shows the text, when the login is incorrect.
+ */
 function userNameOrPasswordIncorrect() {
   let invalidText = document.getElementById('invalidText');
   invalidText.innerHTML = `False Username or Password!`;
 }
 
-//finding current logged in User functions:
 
+/**
+ * This function looks if the user is existing by the email.
+ * @param {String} email - The email-address.
+ * @returns {String|null} - Returns the user name, when the user is existing, otherwise null.
+ */
 function findUserNameByEmail(email) {
   const user = users.find(user => user.email === email);
   return user ? user.name : null;
 }
 
+
+/**
+ * This function greets the logged in user in the summary.
+ */
 async function greetUserInSummary() {
   let currentMail = document.getElementById('emailLoginField').value;
   loggedInUser.push(findUserNameByEmail(currentMail));
   localStorage.setItem("userName", JSON.stringify(loggedInUser));
 }
 
-//sign Up Logic:
 
+/**
+ * This function opens the sign up window.
+ */
 function openSignUpWindow() {
   let signUpContainer = document.getElementById("loginContentContainer");
   signUpContainer.innerHTML = "";
   signUpContainer.innerHTML += renderSignUpWindow();
 }
 
+
+/**
+ * This function shows the login window.
+ */
 function backToLogin() {
   let loginContainer = document.getElementById("loginContentContainer");
   loginContainer.innerHTML = "";
   loginContainer.innerHTML = renderLogin();
 }
 
+
+/**
+ * This function opens the summary as a guest.
+ */
 function openWithGuestLogin() {
   guestLoggedIn = true;
   localStorage.setItem('guest',JSON.stringify(guestLoggedIn));
   window.location.href = "summary.html";
 }
 
-function registeredLogin() {
-  window.location.href = "index.html";
-}
 
-//password validation in SignUp
-
+/**
+ * This function checks if the inserted passwords and the user name are valid.
+ */
 function checkPasswords() {
   let userName = document.getElementById('registerUserName').value;
   let userMail = document.getElementById('registerMailInput').value;
@@ -112,8 +148,10 @@ function checkPasswords() {
   }
 }
 
-// pop up
 
+/**
+ * This function shows the pop up, when the sign up was successful.
+ */
 function successSignUpPopup() {
   let popupContainer = document.getElementById('successRegistration');
   popupContainer.style.display = 'flex';
@@ -122,6 +160,10 @@ function successSignUpPopup() {
   }, 2500);
 }
 
+
+/**
+ * This function goes back to the login after the sign-up.
+ */
 function goBackToLoginAfterSignUp() {
   setTimeout(function() {
     window.location.href = "./index.html";

@@ -311,7 +311,7 @@ function getCategoryColor(cat){
  * @returns {HTML} - With complete HTML task.
  */
 function renderTaskHtml(task, subtasksQty, toggled, coworkersHTML, prioHtml) {
-    return `
+    return /*html*/`
     <div id="${task['taskid']}" class="todo" draggable="true" ondragstart="drag(event)" onclick="openTaskBig(${task['taskid']})">
         <span class="category-board" style="background-color:${getCategoryColor(task.category)}">${task['category']}</span>
         <div class="todo-details">    
