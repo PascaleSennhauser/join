@@ -4,6 +4,10 @@ let pageStatus = true;
 currentStatusTasks = [];
 let finalinitals;
 
+
+/**
+ * This function gets the data of the tasks
+ */
 async function getTaskData() {
   currentStatusTasks = JSON.parse(await getItem("tasks"));
 }

@@ -2,7 +2,7 @@ let isArrowAssignedToEditRotated = false;
 
 
 /**
- * The assignedTo-dropdown gets toggled in the edit-form
+ * The assignedTo-dropdown gets toggled in the edit-form.
  */
 function toggleAssignedToDropDownEdit() {
     let assignedToDropDown = getField('assignedToDropDownEdit');
@@ -17,7 +17,7 @@ function toggleAssignedToDropDownEdit() {
 
 
 /**
- * If-else-statement according to the direction of the arrow in the edit-form
+ * If-else-statement according to the direction of the arrow in the edit-form.
  */
 function ifElseArrowEdit() {
     if (isArrowAssignedToEditRotated == true) {
@@ -29,7 +29,7 @@ function ifElseArrowEdit() {
 
 
 /**
- * This is the function to show the initials of the contacts in the edit-form
+ * This is the function to show the initials of the contacts in the edit-form.
  */
 function renderInitialsSelectedEdit() {
     let contactsSelectedContainer = getField('contactsSelectedContainerEdit');
@@ -45,7 +45,7 @@ function renderInitialsSelectedEdit() {
 
 
 /**
- * If the arrow of assignedTo is rotated the contacts are shown in the edit-form
+ * If the arrow of assignedTo is rotated the contacts are shown in the edit-form.
  */
 function renderContactsAssignedToEdit() {
     let assignedToDropDownWrapper = getField('assignedToDropDownWrapperEdit');
@@ -61,10 +61,10 @@ function renderContactsAssignedToEdit() {
 
 
 /**
- * This is the template to show the contacts in the dropdown in the edit-form
- * @param {Object} contact - This is the array of a specific contact
- * @param {Number} i - This is the index of the contact 
- * @returns The html-template gets returned
+ * This is the template to show the contacts in the dropdown in the edit-form.
+ * @param {Object} contact - This is the array of a specific contact.
+ * @param {Number} i - This is the index of the contact.
+ * @returns The html-template gets returned.
  */
 function assignedToContactsTemplateEdit(contact, i) {
     return /*html*/`
@@ -81,8 +81,8 @@ function assignedToContactsTemplateEdit(contact, i) {
 
 
 /**
- * This function selects the person you click on and puts it in the selectedContactsAssignedTo-array in the edit-form
- * @param {Number} num - This is the index of the contact you selected
+ * This function selects the person you click on and puts it in the selectedContactsAssignedTo-array in the edit-form.
+ * @param {Number} num - This is the index of the contact you selected.
  */
 function selectPersonEdit(num) {
     let selectedPerson = contacts[`${num}`];
@@ -92,8 +92,8 @@ function selectPersonEdit(num) {
 
 
 /**
- * This function removes the person you click on and removes the contact from the selectedContactsAssignedTo-array in the edit-form
- * @param {Number} num - This is the index of the contact you selected
+ * This function removes the person you click on and removes the contact from the selectedContactsAssignedTo-array in the edit-form.
+ * @param {Number} num - This is the index of the contact you selected.
  */
 function removePersonEdit(num) {
     let selectedPerson = contacts[`${num}`]['fullname'];
@@ -109,8 +109,8 @@ function removePersonEdit(num) {
 
 
 /**
- * When you click a contact, the background in the assignedTo-dropdown changes in the edit-form
- * @param {Number} num - This is the index of the contact you clicked 
+ * When you click a contact, the background in the assignedTo-dropdown changes in the edit-form.
+ * @param {Number} num - This is the index of the contact you clicked. 
  */
 function checkButtonContactsCheckedEdit(num) {
     let button = getField(`buttonEdit${num}`);
@@ -125,8 +125,8 @@ function checkButtonContactsCheckedEdit(num) {
 
 
 /**
- * This sets the background color of the initials according to the intitals in the edit-form
- * @param {Number} i - This is the current index
+ * This sets the background color of the initials according to the intitals in the edit-form.
+ * @param {Number} i - This is the current index.
  */
 function renderBackgroundColorInitialsEdit(i) {
     let initialsSelectedContact = contacts[i]['initials'];
@@ -137,9 +137,9 @@ function renderBackgroundColorInitialsEdit(i) {
 
 
 /**
- * This function sets the look of the selected contacts by comparing the names in the edit-form
- * @param {String} fullname - This is the fullname of the contact-array
- * @param {Number} i - This is the index of the current contact 
+ * This function sets the look of the selected contacts by comparing the names in the edit-form.
+ * @param {String} fullname - This is the fullname of the contact-array.
+ * @param {Number} i - This is the index of the current contact. 
  */
 function renderContactsCheckedEdit(fullname, i) {
     for (let j = 0; j < selectedContactsAssignedTo.length; j++) {
@@ -160,7 +160,7 @@ function renderContactsCheckedEdit(fullname, i) {
 
 
 /**
- * This function is when you search for a contact in the edit-form
+ * This function is when you search for a contact in the edit-form.
  */
 function filterNamesEdit() {
     let search = getField('assignedToInputEdit').value.toLowerCase();
@@ -180,9 +180,9 @@ function filterNamesEdit() {
 
 
 /**
- * This function is, when the assignedTo-search-input is active in the edit-form
- * @param {String} search - This is the search word 
- * @param {HTMLElement} assignedToDropDownWrapper - This is the wrapper to show the contacts
+ * This function is, when the assignedTo-search-input is active in the edit-form.
+ * @param {String} search - This is the search word. 
+ * @param {HTMLElement} assignedToDropDownWrapper - This is the wrapper to show the contacts.
  */
 function activeSearchInputEdit(search, assignedToDropDownWrapper) {
     assignedToDropDownWrapper.innerHTML = '';
@@ -191,7 +191,7 @@ function activeSearchInputEdit(search, assignedToDropDownWrapper) {
         let fullname = contact['fullname'];
         if (fullname.toLowerCase().includes(search)) {
             assignedToDropDownWrapper.innerHTML += assignedToContactsTemplateEdit(contact, i);
-            renderContactsChecked(fullname, i)
+            renderContactsCheckedEdit(fullname, i)
             renderBackgroundColorInitials(i);
         }
     }

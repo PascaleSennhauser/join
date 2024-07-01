@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: board-overlay.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: board-overlay.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * This function opens the main pop-up-container
+ */
+function openPopUpContainer() {
+    let popUp = document.getElementById('popUpAtContainer');
+    popUp.classList.remove('d-none');
+}
+
+
+/**
+ * This function closes the main pop-up-container
+ */
+function closePopUpContainer() {
+    let popUp = document.getElementById('popUpAtContainer');
+    popUp.classList.add('d-none');
+}
+
+
+/**
+ * This function removes the d-none of an element
+ * @param {String} name - The id of the specific html element
+ */
+function removeDNone(name) {
+    let field = document.getElementById(name)
+    field.classList.remove('d-none');
+}
+
+
+/**
+ * This function adds the d-none to an element
+ * @param {String} name - The id of the specific html element 
+ */
+function addDNone(name) {
+    let field = document.getElementById(name)
+    field.classList.add('d-none');
+}
+
+
+/**
+ * This function opens the pop-up to add a new task
+ * @param {String} progress - This is the current progress 'todo', 'inprogress' or 'awaitfeedback'
+ */    
+async function openPopUpAt(progress) {
+    await getItem('tasks');
+    addDNone('popUpTaskBig');
+    openPopUpContainer();
+    removeDNone('popUpAtField');
+    removeDNone('closeButtonPopUpAt');
+    renderAddTask();
+    subtasks = [];
+    currentProgress = progress;
+}
+
+
+/**
+ * This function closes the pop-up to add a new task
+ */
+function closePopUpAt() {
+    clearTask();
+    currentProgress = '';
+    closePopUpContainer();
+    addDNone('popUpAtField');
+    fetchAndReloadBoard();
+}
+
+
+/**
+ * This function opens the pop-up, when you click on a specific task on the board
+ * @param {Number} id - This is the taskid of the task you click on
+ */
+async function openTaskBig(id) {
+    await getTasksFromServer();
+    openPopUpContainer();
+    removeDNone('popUpTaskBig');
+    let index = getIndexById(id);
+    let currentTask = tasks[index];
+    let popUp = document.getElementById('popUpTaskBig');
+    popUp.innerHTML = '';
+    subtasks = [];
+    renderAlInformationsTaskBig(popUp, currentTask, index);
+}
+
+
+/**
+ * This function gets the index by the taskid
+ * @param {Number} id - This is the taskid of the task you click on
+ * @returns The index of the task gets returned or null
+ */
+function getIndexById(id) {
+    const index = tasks.findIndex(function(task) {
+        return task.taskid === id;
+    })
+
+    if (index != -1) {
+        return index;
+    } else {
+        return null;
+    }
+}
+
+
+/**
+ * This runction renders the information for the task-pop-up
+ * @param {HTMLElement} popUp - This is the html element for a white canvas of the pop-up-task 
+ * @param {Object} currentTask - task object
+ * @param {Number} index - This is the index of the current task
+ */
+function renderAlInformationsTaskBig(popUp, currentTask, index) {
+    popUp.innerHTML += renderPopUpCardTask(currentTask, index);
+    renderColorsCategoryPu(currentTask);
+    renderDescriptionPu(currentTask);
+    renderDueDatePu(currentTask);
+    renderPrioPu(currentTask);
+    renderassignedToPu(currentTask);
+    renderSubtasksPu(currentTask, index);
+}
+
+
+/**
+ * This is the html-template for to fill in the pop-up
+ * @param {Object} currentTask - task object
+ * @param {Number} index - This is the index of the current task
+ * @returns The html-template gets returned
+ */
+function renderPopUpCardTask(currentTask, index) {
+    return /*html*/`
+        &lt;div class="category-close-btn-container">
+            &lt;div class="category-pu-big" id="categoryPuBig">${currentTask['category']}&lt;/div>
+            &lt;img class="close-button-pu-big" src="./assets/img/close-img.png" onclick="closeTaskBig()">
+        &lt;/div>
+        &lt;h1 class="pu-big-title">${currentTask['title']}&lt;/h1>
+        &lt;span class="pu-big-description" id="puBigDescription">&lt;/span>
+        &lt;table>
+            &lt;tr>
+                &lt;td>Due date:&lt;/td>
+                &lt;td id="dueDatePuBig">&lt;/td>
+            &lt;/tr>
+            &lt;tr id="priorityTaskBig">
+                &lt;td>Priority:&lt;/td>
+                &lt;td id="priorityPuBig">&lt;/td>
+            &lt;/tr>
+        &lt;/table>
+        &lt;span class="pu-big-assigned-to" id="assignedToTaskBig">Assigned to:&lt;/span>
+        &lt;div class="pu-big-contacts" id="puBigContacts">&lt;/div>
+        &lt;span class="pu-big-subtasks" id="subtasksTaskBig">Subtasks&lt;/span> 
+        &lt;div class="pu-big-subtasks-container" id="puBigSubtasksContainer">&lt;/div>
+        &lt;div class="pu-big-edit-container">
+            &lt;div class="pu-big-edit-only" onclick="deleteTask(${index})">
+                &lt;img class="pu-big-delete" src="./assets/img/delete-img.png">
+                &lt;span>Delete&lt;/span>
+            &lt;/div>
+            &lt;div class="pu-big-seperator">&lt;/div>
+            &lt;div class="pu-big-edit-only" onclick="editTask(${index})">
+                &lt;img class="pu-big-edit" src="./assets/img/edit.png">
+                &lt;span>Edit&lt;/span>
+            &lt;/div>
+        &lt;/div>
+    `;
+}
+
+
+/**
+ * The background color of the specific category
+ * @param {Object} currentTask - task object
+ */
+function renderColorsCategoryPu(currentTask) {
+    let currentCategory = currentTask['category'];
+    let category = document.getElementById(`categoryPuBig`);
+    if (currentCategory === "User Story") {
+        category.classList.add('user-story');
+        category.classList.remove('technical-task');
+    } else {
+        category.classList.add('technical-task');
+        category.classList.remove('user-story');
+    }
+}
+
+
+/**
+ * Renders the description part, when there is a description and when not
+ * @param {Object} currentTask - task object
+ */
+function renderDescriptionPu(currentTask) {
+    let description = document.getElementById(`puBigDescription`);
+    if (currentTask['description'] !== '') {
+        description.innerHTML = `&lt;pre>${currentTask['description']}&lt;/pre>`;
+    } else {
+        description.innerHTML = '';
+    }
+    
+}
+
+
+/**
+ * The date gets shown in the correct format
+ * @param {Object} currentTask - task object
+ */
+function renderDueDatePu(currentTask) {
+    let dueDateBig = document.getElementById(`dueDatePuBig`);
+    const dateParts = currentTask['duedate'].split('-');
+    const jsDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
+    const formattedDate = `${jsDate.getDate().toString().padStart(2, '0')}/${(jsDate.getMonth() + 1).toString().padStart(2, '0')}/${jsDate.getFullYear()}`;
+    dueDateBig.innerHTML = formattedDate;
+}
+
+
+/**
+ * The priority is shown or not
+ * @param {Object} currentTask - task object
+ */
+function renderPrioPu(currentTask) {
+    let prioBig = document.getElementById(`priorityPuBig`);
+    let priority = currentTask['priority'];
+    let priorityTitle = document.getElementById('priorityTaskBig');
+    if (priority !== '') {
+        priorityTitle.classList.remove('d-none');
+        let priorityUppercase = priority.charAt(0).toUpperCase() + priority.slice(1);
+        prioBig.innerHTML = /*html*/`
+            ${priorityUppercase}&lt;img src="./assets/img/img-${currentTask['priority']}.png">
+        `;
+    } else {
+        priorityTitle.classList.add('d-none');
+    }
+}
+
+
+/**
+ * The selected contacts are shown
+ * @param {Object} currentTask - task object
+ */
+function renderassignedToPu(currentTask) {
+    let puBigContacts = document.getElementById(`puBigContacts`);
+    puBigContacts.innerHTML = '';
+    let assignedToTitle = document.getElementById('assignedToTaskBig');
+    ifElseToShowContacts(puBigContacts, assignedToTitle, currentTask)
+}
+
+
+/**
+ * The ifElse-statement to show contacts if existing
+ * @param {HTMLElement} puBigContacts - The html-container of the contacts
+ * @param {HTMLElement} assignedToTitle - The html element of the assignedTo-title
+ * @param {Object} currentTask - task object
+ */
+function ifElseToShowContacts(puBigContacts, assignedToTitle, currentTask) {
+    if (currentTask['contactids'].length !== 0) {
+        assignedToTitle.classList.remove('d-none');
+        puBigContacts.classList.remove('d-none');
+        for (let i = 0; i &lt; currentTask['contactids'].length; i++) {
+            const contactid = currentTask['contactids'][i];
+            const indexContact = getContactPu(contactid);
+            ifElseContact(indexContact, puBigContacts, i);
+        } 
+    } else {
+        assignedToTitle.classList.add('d-none');
+        puBigContacts.classList.add('d-none');
+    }
+}
+
+
+/**
+ * This function gets all selected contacts from the array
+ * @param {Number} contactid - The id of the contact 
+ * @returns If returns all the selected contacts or null
+ */
+function getContactPu(contactid) {
+    for (let j = 0; j &lt; contacts.length; j++) {
+        if (contacts[j].contactid == contactid) {
+            return j;
+        }
+    }
+    return null;
+}
+
+
+/**
+ * The if-else-part, when there are contacts or no contacts
+ * @param {Number} indexContact - The index of the contact
+ * @param {HTMLElement} puBigContacts - The html element of the id puBigContacts
+ * @param {Number} i - The index of the current contactId
+ */
+function ifElseContact(indexContact, puBigContacts, i) {
+    if (indexContact !== null) {
+        const contact = contacts[indexContact];
+        selectedContactsAssignedTo.push(contact);
+        const initials = contact['initials'];
+        puBigContacts.innerHTML += /*html*/`
+        &lt;div class="pu-big-contact-container">
+            &lt;div id="initialsBig${i}">${contact['initials']}&lt;/div>
+            &lt;span>${contact['fullname']}&lt;/span>
+        &lt;/div>
+    `;
+    renderBackgroundColorOverlay(initials, i);
+    } else {
+        puBigContacts.innerHTML = '';
+    }
+}
+
+
+/**
+ * This runction renders the background color of the initials
+ * @param {String} initials - Those are the initials as a string
+ * @param {Number} i - The index of the current contactId
+ */
+function renderBackgroundColorOverlay(initials, i) {
+    let firstLetter = initials.charAt(0).toLowerCase();
+    let initialsField = getField(`initialsBig${i}`);
+    initialsField.classList.add(`${firstLetter}`);
+}
+
+
+/**
+ * This is the function to render the subtasks in the overaly
+ * @param {Object} currentTask - task object
+ * @param {Number} index - This is the index of the current task
+ */
+function renderSubtasksPu(currentTask, index) {
+    let subtasksBigContainer = document.getElementById(`puBigSubtasksContainer`);
+    subtasksBigContainer.innerHTML = '';
+    let subtasksBigTitle = document.getElementById('subtasksTaskBig');
+    if (currentTask['subtasks'] != '') {
+        subtasksBigTitle.classList.remove('d-none');
+        getSubtasksPu(currentTask, subtasksBigContainer, index);
+    } else {
+        subtasksBigTitle.classList.add('d-none');
+        subtasksBigContainer.innerHTML = '';
+    }
+}
+
+
+/**
+ * For-loop to get all the subtasks
+ * @param {Object} currentTask - task object
+ * @param {HTMLElement} subtasksBigContainer - This is html element of the subtasks container
+ * @param {Number} index - This is the index of the current task
+ */
+function getSubtasksPu(currentTask, subtasksBigContainer, index) {
+    for (let i = 0; i &lt; currentTask['subtasks'].length; i++) {
+        let currentSubtask = currentTask['subtasks'][i];
+        subtasks.push(currentSubtask);
+        subtasksBigContainer.innerHTML += /*html*/`
+            &lt;div class="pu-big-subtask-container">
+                &lt;img id="subtaskImg${i}" src="./assets/img/check-button.png" onclick="renderFinishedSubtaskPu(${i}, ${index})">
+                &lt;span>${currentSubtask['name']}&lt;/span>
+            &lt;/div>
+        `;
+        renderCheckedSubtaskPu(i, currentSubtask);
+    }
+}
+
+
+/**
+ * The value of the isToggled vairaible gets changed and the image in the input gets changed
+ * @param {Number} i - The index of the subtask
+ * @param {Number} index - The index of the task
+ */
+function renderFinishedSubtaskPu(i, index) {
+    let currentTask = tasks[index];
+    let currentSubtask = currentTask['subtasks'][i];
+    currentSubtask['isToggled'] = !currentSubtask['isToggled'];
+    renderCheckImage(currentSubtask, i);
+}
+
+
+/**
+ * This function renders the check-button if the task gets opened
+ * @param {Number} i - The index of the subtask
+ * @param {Object} currentSubtask - subtask object
+ */
+function renderCheckedSubtaskPu(i, currentSubtask) {
+    renderCheckImage(currentSubtask, i);
+}
+
+
+/**
+ * This function toggles the check-image
+ * @param {Object} currentSubtask - subtask object
+ * @param {Number} i - The index of the subtask
+ */
+function renderCheckImage(currentSubtask, i) {
+    let currentSubtaskImg = document.getElementById(`subtaskImg${i}`);
+    if (currentSubtask['isToggled']) {
+        currentSubtaskImg.src = './assets/img/checked-button-black.png';
+    } else {
+        currentSubtaskImg.src = './assets/img/check-button.png';
+    }
+}
+
+
+/**
+ * This function deletes the task
+ * @param {Number} index - The index of the task
+ */
+async function deleteTask(index) {
+    tasks.splice(index, 1);
+    await closeTaskBig();
+    init();
+}
+
+
+/**
+ * This function closes the task-pop-up
+ */
+async function closeTaskBig() {
+    await setItem('tasks', tasks);
+    closePopUpContainer();
+    try {
+        clearInputFieldsTaskBig();
+    } catch(e) {
+    }
+    addDNone('popUpTaskBig');
+    fetchAndReloadBoard();
+}
+
+
+/**
+ * This function clears the input fields after closing the task to prepare for the new task, which gets opened
+ */
+function clearInputFieldsTaskBig() {
+    getField('titleInputEdit').value = '';
+    getField('descriptionInputEdit').value = '';
+    getField('dateInputEdit').value = '';
+    selectedContactsAssignedTo = [];
+    subtasks = [];
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#activeSearchInput">activeSearchInput</a></li><li><a href="global.html#activeSearchInputEdit">activeSearchInputEdit</a></li><li><a href="global.html#addCloseButton">addCloseButton</a></li><li><a href="global.html#addContact">addContact</a></li><li><a href="global.html#addDNone">addDNone</a></li><li><a href="global.html#addFocus">addFocus</a></li><li><a href="global.html#addFocusToContainer">addFocusToContainer</a></li><li><a href="global.html#addSubtask">addSubtask</a></li><li><a href="global.html#addSubtaskEdit">addSubtaskEdit</a></li><li><a href="global.html#allowDrop">allowDrop</a></li><li><a href="global.html#assignedToContactsTemplate">assignedToContactsTemplate</a></li><li><a href="global.html#assignedToContactsTemplateEdit">assignedToContactsTemplateEdit</a></li><li><a href="global.html#buildContact">buildContact</a></li><li><a href="global.html#calculateSubtasksToggled">calculateSubtasksToggled</a></li><li><a href="global.html#checkButtonContactsChecked">checkButtonContactsChecked</a></li><li><a href="global.html#checkButtonContactsCheckedEdit">checkButtonContactsCheckedEdit</a></li><li><a href="global.html#checkIdOnTaskAssignment">checkIdOnTaskAssignment</a></li><li><a href="global.html#checkPath">checkPath</a></li><li><a href="global.html#checkValueDueDate">checkValueDueDate</a></li><li><a href="global.html#checkValueTitle">checkValueTitle</a></li><li><a href="global.html#clearContactIdsFromTasks">clearContactIdsFromTasks</a></li><li><a href="global.html#clearId">clearId</a></li><li><a href="global.html#clearInputFieldsTaskBig">clearInputFieldsTaskBig</a></li><li><a href="global.html#clearPrioButtons">clearPrioButtons</a></li><li><a href="global.html#clearPrioButtonsEdit">clearPrioButtonsEdit</a></li><li><a href="global.html#clearTask">clearTask</a></li><li><a href="global.html#clearUserDetail">clearUserDetail</a></li><li><a href="global.html#closeMenu">closeMenu</a></li><li><a href="global.html#closeOverlay">closeOverlay</a></li><li><a href="global.html#closePopUpAt">closePopUpAt</a></li><li><a href="global.html#closePopUpContainer">closePopUpContainer</a></li><li><a href="global.html#closeTaskBig">closeTaskBig</a></li><li><a href="global.html#closeTaskEdit">closeTaskEdit</a></li><li><a href="global.html#collectAndRenderCoworkers">collectAndRenderCoworkers</a></li><li><a href="global.html#collectInputFields">collectInputFields</a></li><li><a href="global.html#collectInputFieldsEdit">collectInputFieldsEdit</a></li><li><a href="global.html#colorFontInput">colorFontInput</a></li><li><a href="global.html#controlIfDescriptionEmtpy">controlIfDescriptionEmtpy</a></li><li><a href="global.html#createInitials">createInitials</a></li><li><a href="global.html#createNewId">createNewId</a></li><li><a href="global.html#createTask">createTask</a></li><li><a href="global.html#createTaskInstance">createTaskInstance</a></li><li><a href="global.html#createTaskInstanceEdit">createTaskInstanceEdit</a></li><li><a href="global.html#defineFirstLetters">defineFirstLetters</a></li><li><a href="global.html#deleteAddedSubtask">deleteAddedSubtask</a></li><li><a href="global.html#deleteAddedSubtaskEdit">deleteAddedSubtaskEdit</a></li><li><a href="global.html#deleteContact">deleteContact</a></li><li><a href="global.html#deleteInputSubtask">deleteInputSubtask</a></li><li><a href="global.html#deleteInputSubtaskEdit">deleteInputSubtaskEdit</a></li><li><a href="global.html#deleteTask">deleteTask</a></li><li><a href="global.html#drag">drag</a></li><li><a href="global.html#drop">drop</a></li><li><a href="global.html#editContact">editContact</a></li><li><a href="global.html#editTask">editTask</a></li><li><a href="global.html#fetchAndReloadBoard">fetchAndReloadBoard</a></li><li><a href="global.html#fetchContacts">fetchContacts</a></li><li><a href="global.html#fetchContactsAt">fetchContactsAt</a></li><li><a href="global.html#fetchTasksAt">fetchTasksAt</a></li><li><a href="global.html#filterNames">filterNames</a></li><li><a href="global.html#filterNamesEdit">filterNamesEdit</a></li><li><a href="global.html#filterTasks">filterTasks</a></li><li><a href="global.html#filterTasksByProgress">filterTasksByProgress</a></li><li><a href="global.html#finalDeleteContact">finalDeleteContact</a></li><li><a href="global.html#generateSaveAndReload">generateSaveAndReload</a></li><li><a href="global.html#getAllInputFields">getAllInputFields</a></li><li><a href="global.html#getBackgroundColor">getBackgroundColor</a></li><li><a href="global.html#getCategoryColor">getCategoryColor</a></li><li><a href="global.html#getContactIdsfromTasks">getContactIdsfromTasks</a></li><li><a href="global.html#getContactPu">getContactPu</a></li><li><a href="global.html#getContactsFromServer">getContactsFromServer</a></li><li><a href="global.html#getField">getField</a></li><li><a href="global.html#getIndexById">getIndexById</a></li><li><a href="global.html#getInitials">getInitials</a></li><li><a href="global.html#getItem">getItem</a></li><li><a href="global.html#getPriority">getPriority</a></li><li><a href="global.html#getPriorityHtml">getPriorityHtml</a></li><li><a href="global.html#getProgress">getProgress</a></li><li><a href="global.html#getSubtasksPu">getSubtasksPu</a></li><li><a href="global.html#getTaskData">getTaskData</a></li><li><a href="global.html#getTasksFromFile">getTasksFromFile</a></li><li><a href="global.html#getTasksFromServer">getTasksFromServer</a></li><li><a href="global.html#getTools">getTools</a></li><li><a href="global.html#getToolsEdit">getToolsEdit</a></li><li><a href="global.html#gettingContactId">gettingContactId</a></li><li><a href="global.html#goToBoard">goToBoard</a></li><li><a href="global.html#handleMobileView">handleMobileView</a></li><li><a href="global.html#hideMobileDetailView">hideMobileDetailView</a></li><li><a href="global.html#highlightContact">highlightContact</a></li><li><a href="global.html#ifElseArrow">ifElseArrow</a></li><li><a href="global.html#ifElseArrowEdit">ifElseArrowEdit</a></li><li><a href="global.html#ifElseContact">ifElseContact</a></li><li><a href="global.html#ifElseToShowContacts">ifElseToShowContacts</a></li><li><a href="global.html#includeHTML">includeHTML</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initAddTask">initAddTask</a></li><li><a href="global.html#inputAddedSubtaskBlur">inputAddedSubtaskBlur</a></li><li><a href="global.html#inputAddedSubtaskBlurEdit">inputAddedSubtaskBlurEdit</a></li><li><a href="global.html#inputAddedSubtaskEdit">inputAddedSubtaskEdit</a></li><li><a href="global.html#inputAddedSubtaskFocus">inputAddedSubtaskFocus</a></li><li><a href="global.html#inputAddedSubtaskFocusClickOnImg">inputAddedSubtaskFocusClickOnImg</a></li><li><a href="global.html#inputAddedSubtaskFocusClickOnImgEdit">inputAddedSubtaskFocusClickOnImgEdit</a></li><li><a href="global.html#inputAssignedToBlur">inputAssignedToBlur</a></li><li><a href="global.html#inputAssignedToFocus">inputAssignedToFocus</a></li><li><a href="global.html#inputSubtask">inputSubtask</a></li><li><a href="global.html#inputSubtaskBlur">inputSubtaskBlur</a></li><li><a href="global.html#inputSubtaskBlurEdit">inputSubtaskBlurEdit</a></li><li><a href="global.html#inputSubtaskEdit">inputSubtaskEdit</a></li><li><a href="global.html#inputSubtaskFocus">inputSubtaskFocus</a></li><li><a href="global.html#inputSubtaskFocusEdit">inputSubtaskFocusEdit</a></li><li><a href="global.html#isMobile">isMobile</a></li><li><a href="global.html#minMaxDate">minMaxDate</a></li><li><a href="global.html#newContact">newContact</a></li><li><a href="global.html#openDeleteOverlay">openDeleteOverlay</a></li><li><a href="global.html#openPopUpAt">openPopUpAt</a></li><li><a href="global.html#openPopUpContainer">openPopUpContainer</a></li><li><a href="global.html#openTaskBig">openTaskBig</a></li><li><a href="global.html#regenerateInitials">regenerateInitials</a></li><li><a href="global.html#removeCloseButton">removeCloseButton</a></li><li><a href="global.html#removeDNone">removeDNone</a></li><li><a href="global.html#removeFocus">removeFocus</a></li><li><a href="global.html#removeFocusToContainer">removeFocusToContainer</a></li><li><a href="global.html#removeHighlight">removeHighlight</a></li><li><a href="global.html#removePerson">removePerson</a></li><li><a href="global.html#removePersonEdit">removePersonEdit</a></li><li><a href="global.html#renderAddTask">renderAddTask</a></li><li><a href="global.html#renderAlInformationsTaskBig">renderAlInformationsTaskBig</a></li><li><a href="global.html#renderAllInformationsEditTask">renderAllInformationsEditTask</a></li><li><a href="global.html#renderAwaitFeedback">renderAwaitFeedback</a></li><li><a href="global.html#renderBackgroundColorInitials">renderBackgroundColorInitials</a></li><li><a href="global.html#renderBackgroundColorInitialsEdit">renderBackgroundColorInitialsEdit</a></li><li><a href="global.html#renderBackgroundColorInitialsSelected">renderBackgroundColorInitialsSelected</a></li><li><a href="global.html#renderBackgroundColorOverlay">renderBackgroundColorOverlay</a></li><li><a href="global.html#renderBoard">renderBoard</a></li><li><a href="global.html#renderCheckImage">renderCheckImage</a></li><li><a href="global.html#renderCheckedSubtaskPu">renderCheckedSubtaskPu</a></li><li><a href="global.html#renderColorsCategoryPu">renderColorsCategoryPu</a></li><li><a href="global.html#renderContact">renderContact</a></li><li><a href="global.html#renderContactDetail">renderContactDetail</a></li><li><a href="global.html#renderContactDetailMenu">renderContactDetailMenu</a></li><li><a href="global.html#renderContactHtml">renderContactHtml</a></li><li><a href="global.html#renderContactIds">renderContactIds</a></li><li><a href="global.html#renderContactList">renderContactList</a></li><li><a href="global.html#renderContacts">renderContacts</a></li><li><a href="global.html#renderContactsAssignedTo">renderContactsAssignedTo</a></li><li><a href="global.html#renderContactsAssignedToEdit">renderContactsAssignedToEdit</a></li><li><a href="global.html#renderContactsChecked">renderContactsChecked</a></li><li><a href="global.html#renderContactsCheckedEdit">renderContactsCheckedEdit</a></li><li><a href="global.html#renderDateEdit">renderDateEdit</a></li><li><a href="global.html#renderDescription">renderDescription</a></li><li><a href="global.html#renderDescriptionEdit">renderDescriptionEdit</a></li><li><a href="global.html#renderDescriptionPu">renderDescriptionPu</a></li><li><a href="global.html#renderDone">renderDone</a></li><li><a href="global.html#renderDueDatePu">renderDueDatePu</a></li><li><a href="global.html#renderEditContactFields">renderEditContactFields</a></li><li><a href="global.html#renderEditContactHtmlForm">renderEditContactHtmlForm</a></li><li><a href="global.html#renderEmptyTodo">renderEmptyTodo</a></li><li><a href="global.html#renderFinishedSubtaskPu">renderFinishedSubtaskPu</a></li><li><a href="global.html#renderInProgress">renderInProgress</a></li><li><a href="global.html#renderInitialsSelected">renderInitialsSelected</a></li><li><a href="global.html#renderInitialsSelectedEdit">renderInitialsSelectedEdit</a></li><li><a href="global.html#renderInputSubtaskImg">renderInputSubtaskImg</a></li><li><a href="global.html#renderInputSubtaskImgEdit">renderInputSubtaskImgEdit</a></li><li><a href="global.html#renderLetterAndContacts">renderLetterAndContacts</a></li><li><a href="global.html#renderLetterHtml">renderLetterHtml</a></li><li><a href="global.html#renderNewContactFields">renderNewContactFields</a></li><li><a href="global.html#renderPopUpCardEdit">renderPopUpCardEdit</a></li><li><a href="global.html#renderPopUpCardTask">renderPopUpCardTask</a></li><li><a href="global.html#renderPrioEdit">renderPrioEdit</a></li><li><a href="global.html#renderPrioPu">renderPrioPu</a></li><li><a href="global.html#renderSubtaskBar">renderSubtaskBar</a></li><li><a href="global.html#renderSubtasks">renderSubtasks</a></li><li><a href="global.html#renderSubtasksEdit">renderSubtasksEdit</a></li><li><a href="global.html#renderSubtasksPu">renderSubtasksPu</a></li><li><a href="global.html#renderTaskHtml">renderTaskHtml</a></li><li><a href="global.html#renderTasks">renderTasks</a></li><li><a href="global.html#renderTitleEdit">renderTitleEdit</a></li><li><a href="global.html#renderToDo">renderToDo</a></li><li><a href="global.html#renderassignedToPu">renderassignedToPu</a></li><li><a href="global.html#returnDeleteHtml">returnDeleteHtml</a></li><li><a href="global.html#returnSubtaskTemplate">returnSubtaskTemplate</a></li><li><a href="global.html#returnSubtaskTemplateEdit">returnSubtaskTemplateEdit</a></li><li><a href="global.html#saveAddedSubtask">saveAddedSubtask</a></li><li><a href="global.html#saveAddedSubtaskEdit">saveAddedSubtaskEdit</a></li><li><a href="global.html#saveAndCloseEdit">saveAndCloseEdit</a></li><li><a href="global.html#saveContact">saveContact</a></li><li><a href="global.html#saveEditedContact">saveEditedContact</a></li><li><a href="global.html#saveandShowContact">saveandShowContact</a></li><li><a href="global.html#selectCategory">selectCategory</a></li><li><a href="global.html#selectPerson">selectPerson</a></li><li><a href="global.html#selectPersonEdit">selectPersonEdit</a></li><li><a href="global.html#setArrowRotated">setArrowRotated</a></li><li><a href="global.html#setBackgroundColorPrioButton">setBackgroundColorPrioButton</a></li><li><a href="global.html#setFocus">setFocus</a></li><li><a href="global.html#setFocusEdit">setFocusEdit</a></li><li><a href="global.html#setInputClear">setInputClear</a></li><li><a href="global.html#setItem">setItem</a></li><li><a href="global.html#setPrio">setPrio</a></li><li><a href="global.html#setPrioMedium">setPrioMedium</a></li><li><a href="global.html#setandSaveContact">setandSaveContact</a></li><li><a href="global.html#showContactDetail">showContactDetail</a></li><li><a href="global.html#showMessage">showMessage</a></li><li><a href="global.html#sortLettersByAlphabet">sortLettersByAlphabet</a></li><li><a href="global.html#toggleAssignedToDropDown">toggleAssignedToDropDown</a></li><li><a href="global.html#toggleAssignedToDropDownEdit">toggleAssignedToDropDownEdit</a></li><li><a href="global.html#toggleCategoryDropDown">toggleCategoryDropDown</a></li><li><a href="global.html#togglePrio">togglePrio</a></li><li><a href="global.html#validateEditNameInput">validateEditNameInput</a></li><li><a href="global.html#validateSaveNameInput">validateSaveNameInput</a></li><li><a href="global.html#validationAlertMessage">validationAlertMessage</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Mon Jul 01 2024 11:50:26 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

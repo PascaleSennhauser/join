@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: contacts_overlay.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: contacts_overlay.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>let tasks;
+
+/**
+ * Fetches tasks from Server and adds to tasks Array
+ */
+(async () => {
+    tasks = JSON.parse(await getItem('tasks'));
+})();
+
+/**
+ * Helper function which loops over all contacts and assigned ids and removes a the contactid when its not present anymore
+ * This need to be run once a user has been deleted!
+ */
+function clearContactIdsFromTasks() {
+    let allContactIds = Array.from(new Set(contacts.map(ct => ct.contactid)));
+    tasks.forEach(task => {
+        task.contactids = task.contactids.filter(id => allContactIds.includes(id));
+    })
+    setItem('tasks', tasks);
+}
+
+/**
+ * This closes the Overlay with id overlay
+ */
+function closeOverlay() {
+    document.getElementById('overlay').classList.add('d-none');
+}
+
+/**
+ * Gets the index from a Contact Object by the contactid
+ * @param {String} id The contactid of a Contact 
+ * @returns {Number} The Position of the Contact Object in the contacts Array
+ */
+function getIndexById(id) {
+    let pos;
+    contacts.forEach((contact, index) => {
+        if (contact.contactid == id) {
+            pos = index;
+        }
+    });
+    return pos;
+}
+
+/**
+ * This shows a message badge to the user
+ * @param {String} text Receives the text which is dislpayed to the User
+ */
+function showMessage(text) {
+    let container = document.getElementById('messageBox');
+    container.innerHTML = `${text}`;
+    container.classList.remove('d-none');
+    setTimeout(() => {
+        container.classList.add('d-none');
+    }, 2500);
+}
+
+/**
+ * This opens the Overlay and calling function to render the form
+ */
+function newContact() {
+    document.getElementById('overlay').classList.remove('d-none');
+    document.getElementById('overlay-headline').innerHTML = 'Add contact';
+    document.getElementById('overlay-sub-headline').innerHTML = 'Tasks are better with a team';
+    renderNewContactFields();
+}
+
+/**
+ * This renders the HTML form for a new Contact
+ */
+function renderNewContactFields() {
+    document.getElementById('overlay-content').innerHTML =
+        `
+        &lt;div class="edit-contact-form">
+            &lt;div class="align-center">
+                &lt;div class="cmh-logo-big cmh-logo-big-overlay" style="background-color:#d1d1d1">&lt;img src="./assets/img/person-white.png">&lt;/div>
+            &lt;/div>     
+                &lt;form class="flex-col w-60 overlay-form" onsubmit="return validateSaveNameInput(event)">
+                    &lt;input minlength="2" id="addName" class="inputField input-fullname" placeholder="Firstname Lastname" title="Please enter your Full Name separated by a space (only 2 Values)" required/>
+                    &lt;input type="email" id="addEmail" class="inputField input-email" placeholder="Email" required/>
+                    &lt;input type="phone" id="addPhone" class="inputField input-phone" placeholder="Phone" required/>
+                    &lt;div id="alertMessage" class="validation-message">&lt;/div>
+                    &lt;div class="align-center gap-24 button-container">
+                        &lt;button class="button-light cancel-btn" onclick="closeOverlay()">Cancel&lt;/button>
+                        &lt;button type="submit" class="button-dark align-center">Create contact&lt;img src="./assets/img/check.png">&lt;/igm>&lt;/button>
+                    &lt;/div>                             
+                &lt;/form>                        
+        &lt;/div>
+    `;
+}
+
+/**
+ * This is used for the Form Validation on the Add/Edit Input Form
+ * @param {String} msg This is the message to be displayed
+ * @param {String} field This is the id of the inputField from the error (To highlight it)
+ */
+function validationAlertMessage(msg, field) {
+    const msgbox = document.getElementById('alertMessage');
+    const emailfield = document.getElementById(`${field}`);
+    emailfield.classList.add('highlight');
+    msgbox.innerHTML = msg;
+    setTimeout(() => {
+        msgbox.innerHTML = '';
+        emailfield.classList.remove('highlight');
+    }, 2500);
+}
+
+/**
+ * This validates the Input of the input form (add/edit Contact)
+ * @param {Object} event Form Event
+ * @returns {Boolean} Return false when regex fails and stops the event to save the contact
+ */
+function validateSaveNameInput(event) {
+    let input = document.getElementById('addName').value.trim();
+    var regex = /^[a-zA-ZäöüÄÖÜß]+\s+[a-zA-ZäöüÄÖÜß]+$/;
+    if (!regex.test(input)) {
+        validationAlertMessage('Please input only 2 values seperated by a space.', 'addName');
+        return false;
+    }
+    addContact(event);
+}
+
+/**
+ * Once HTML Validation and JS Validation are fine this defines the Contact Object fields
+ * @param {Object} Event Form 
+ */
+function addContact(event) {
+    event.preventDefault();
+    const fullname = document.getElementById('addName').value;
+    const firstname = fullname.split(' ')[0];
+    const lastname = fullname.split(' ')[1];
+    const email = document.getElementById('addEmail').value;
+    const phone = document.getElementById('addPhone').value;
+    if (firstname &amp;&amp; email &amp;&amp; phone) {
+        buildContact(firstname, lastname, fullname, email, phone);
+    }
+}
+
+/**
+ * This calculates a new contactId and gets the Initials from the firstname and lastname.
+ * After it submits all data to saveContact method 
+ * @param {String} firstname 
+ * @param {String} lastname 
+ * @param {String} fullname 
+ * @param {String} email 
+ * @param {String} phone 
+ */
+function buildContact(firstname, lastname, fullname, email, phone) {
+    let initials = createInitials(firstname, lastname);
+    let id = createNewId();
+    setandSaveContact(id, email, firstname, lastname, fullname, initials, phone);
+}
+
+/**
+ * Creates a Contact Object and pushes to contacts Array
+ * @param {Number} id 
+ * @param {String} email 
+ * @param {String} firstname 
+ * @param {String} lastname 
+ * @param {String} fullname 
+ * @param {String} initials 
+ * @param {String} phone 
+ */
+function setandSaveContact(id, email, firstname, lastname, fullname, initials, phone) {
+    const contact = {
+        "contactid": id,
+        "firstname": firstname,
+        "lastname": lastname,
+        "fullname": fullname,
+        "email": email,
+        "phone": phone,
+        "initials": initials
+    }
+    contacts.push(contact);
+    saveandShowContact(id);    
+}
+
+/**
+ * This uploads the contacts Array to the Server and renders the new created Contact
+ * @param {Number} id the contactid of the Contact Object
+ */
+function saveandShowContact(id) {
+    setItem('contacts', contacts);
+    renderContactList();
+    showContactDetail(id);
+    closeOverlay();
+    showMessage('Contact successfully created');
+}
+
+/**
+ * Helper function to create initials like HP from two Strings (firstname, lastname)
+ * @param {String} firstname 
+ * @param {String} lastname 
+ * @returns {String} String with 2 letters in Uppercase!
+ */
+function createInitials(firstname, lastname) {
+    let firstletter = firstname.charAt(0).toUpperCase();
+    let secondletter = lastname.charAt(0).toUpperCase();
+    let initials = firstletter + secondletter;
+    return initials;
+}
+
+/**
+ * This creates a new Id for a Contact Object
+ * Checks if not existing yet by an Object in contacts Array
+ * Checks also if not existing on any Task Assignment
+ * @returns {Number} contactid
+ */
+function createNewId() {
+    if (contacts.length === 0) { return 1; }
+    let arr = contacts.map(contact => Number(contact.contactid));
+    arr.sort((a, b) => a - b);
+    let newid = arr[arr.length - 1] + 1;
+    do {
+        newid++
+    } while (!checkIdOnTaskAssignment(newid));
+    return newid;
+}
+
+/**
+ * This checks if an id is assigned on a Task
+ * @param {Number} newid 
+ * @returns {Boolean}
+ */
+function checkIdOnTaskAssignment(newid) {
+    let arr = getContactIdsfromTasks();
+    return !arr.includes(newid);
+}
+
+/**
+ * fetches all contactIds from all Tasks in one array and removes duplicates
+ * @returns {Array} With all Ids assigned into tasks
+ */
+function getContactIdsfromTasks() {
+    let arr = [];
+    tasks.forEach(task => {
+        task.contactids.forEach(contactid => {
+            if (!arr.includes(contactid)) {
+                arr.push(contactid);
+            }
+        });
+    });
+    return arr;
+}
+
+/* EDIT Contact Section 👇️ */
+/**
+ * Open Overlay to Edit a contact
+ * @param {String} id The contactid of the Object to Edit 
+ */
+function editContact(id) {
+    document.getElementById('overlay').classList.remove('d-none');
+    document.getElementById('overlay-headline').innerHTML = 'Edit contact';
+    document.getElementById('overlay-sub-headline').innerHTML = '';
+    renderEditContactFields(id);
+}
+
+/**
+ * Gets the Contact Object index by the contact id, gets the backgroundColor and calls method to render the HTML Form
+ * @param {String} id contactid of the Contact Object
+ */
+function renderEditContactFields(id) {
+    let index = getIndexById(id);
+    const contact = contacts[index];
+    const color = getBackgroundColor(id);
+    renderEditContactHtmlForm(contact, color);
+}
+
+/**
+ * Renders the form and fills with the contact Object data
+ * @param {Object} contact Object with all values stored
+ * @param {String} color Color used for the Initials Image
+ */
+function renderEditContactHtmlForm(contact, color) {
+    document.getElementById('overlay-content').innerHTML = `
+        &lt;div class="edit-contact-form">
+            &lt;div class="align-center">
+                &lt;div class="cmh-logo-big cmh-logo-big-overlay" style="background-color:${color}">${contact.initials}&lt;/div>
+            &lt;/div>
+            &lt;form class="flex-col w-60 overlay-form" onsubmit="return validateEditNameInput(event, ${contact.contactid})">
+                &lt;input id="editName" class="inputField input-fullname" value="${contact.firstname} ${contact.lastname}" placeholder="Firstname Lastname" required/>
+                &lt;input id="editEmail" type="email" class="inputField input-email" value="${contact.email}" placeholder="Email" required/>
+                &lt;input id="editPhone" class="inputField input-phone" value="${contact.phone}" placeholder="Phone" required/>
+                &lt;div id="alertMessage" class="validation-message">&lt;/div>
+                &lt;div class="align-center gap-24 button-container">
+                    &lt;button class="button-light" onclick="deleteContact('${contact.contactid}')">Delete&lt;/button>
+                    &lt;button type="submit" class="button-dark align-center">Save&lt;img src="./assets/img/check.png">&lt;/img>&lt;/button>
+                &lt;/div>
+            &lt;/form>
+        &lt;/div>
+    `;
+}
+
+/**
+ * This validates the Input and prevent the form to be submitted, alerts message when regex test fails
+ * @param {Obejct} event Form
+ * @param {String} id contactid of the Contact Object 
+ * @returns {Boolean} when regex test fails
+ */
+function validateEditNameInput(event, id) {
+    event.preventDefault();
+    let input = document.getElementById('editName').value;
+    var regex = /^[a-zA-ZäöüÄÖÜß]+\s+[a-zA-ZäöüÄÖÜß]+$/;
+    if (!regex.test(input)) {
+        validationAlertMessage('Please input only 2 values seperated by a space.', 'editName');
+        return false;
+    }
+    saveEditedContact(id);
+}
+
+/**
+ * This gathers all the data from the form and splits the name to firstname and lastname
+ * @param {String} id contactid of the Contact Object to Edit
+ * calls generateSaveAndReload()
+ */
+function saveEditedContact(id) {
+    let index = getIndexById(id);
+    const fullname = document.getElementById('editName').value;
+    const firstname = fullname.split(' ')[0];
+    const lastname = fullname.split(' ')[1];
+    const email = document.getElementById('editEmail').value;
+    const phone = document.getElementById('editPhone').value;
+    generateSaveAndReload(index, id, fullname, firstname, lastname, email, phone);
+}
+
+/**
+ * This function generates the new Initials, saves Object to Array, send Array to Server, renders the ContactDetails,
+ * closes the Overlay and show a Message Badge
+ * @param {*} index 
+ * @param {*} id 
+ * @param {*} fullname 
+ * @param {*} firstname 
+ * @param {*} lastname 
+ * @param {*} email 
+ * @param {*} phone 
+ */
+function generateSaveAndReload(index, id, fullname, firstname, lastname, email, phone) {
+    regenerateInitials(index, firstname, lastname);
+    saveContact(index, firstname, lastname, fullname, email, phone);
+    setItem('contacts', contacts);
+    renderContactList();
+    showContactDetail(id);
+    closeOverlay();
+    showMessage('Contact successfully edited');
+}
+
+/**
+ * This function regnerates Initials for a contact
+ * @param {Number} index the index position of the Contact Object in contacts 
+ * @param {*} firstname 
+ * @param {*} lastname 
+ */
+function regenerateInitials(index, firstname, lastname) {
+    if (index &amp;&amp; firstname &amp;&amp; lastname) {
+        let firstletter = firstname.charAt(0).toUpperCase();
+        let secondletter = lastname.charAt(0).toUpperCase();
+        let initials = firstletter + secondletter;
+        contacts[index].initials = initials;
+    }
+}
+
+/**
+ * This updates the contact object from contacts array
+ * @param {Number} index Position of the Object
+ * @param {String} firstname 
+ * @param {String} lastname 
+ * @param {String} fullname 
+ * @param {String} email 
+ * @param {String} phone 
+ */
+function saveContact(index, firstname, lastname, fullname, email, phone) {
+    if (index) {
+        contacts[index].firstname = firstname;
+        contacts[index].lastname = lastname;
+        contacts[index].fullname = fullname;
+        contacts[index].email = email;
+        contacts[index].phone = phone;
+    }
+}
+
+/**
+ * This function gathers the id from a Contact Object and call to open Overlay
+ * @param {Number} id Index of the object in the contacts array
+ */
+function deleteContact(id) {
+    let index = getIndexById(id);
+    openDeleteOverlay(index);
+}
+
+/**
+ * This opens the Delete User Overlay
+ * @param {Number} index Of the Contact Object in the contacts Array
+ */
+function openDeleteOverlay(index) {
+    renderContact(index);
+    document.getElementById('overlay').classList.remove('d-none');
+    document.getElementById('overlay-headline').innerHTML = 'Delete contact';
+    document.getElementById('overlay-sub-headline').innerHTML = '';
+}
+
+/**
+ * This function gets to contact object and calls returnDeleteHtml() with it
+ * @param {Number} index of the Contact Object in the contacst Array
+ */
+function renderContact(index) {
+    let contact = contacts[index];
+    document.getElementById('overlay-content').innerHTML = `${returnDeleteHtml(contact, index)}`;
+}
+
+/**
+ * Returns HTML for the Contact Obejct to be deleted
+ * @param {Obejct} contact Object which should be deleted 
+ * @param {Number} index Position of the Object int he Contacts Array 
+ * @returns {HTML}
+ */
+function returnDeleteHtml(contact, index) {
+    return `
+        &lt;div class="inner-box full-height">
+            &lt;div class="headline">&lt;b>Are you sure you want to delete this contact?&lt;/b>&lt;/div>
+            &lt;div class="flex-col">
+                &lt;span>&lt;b>Name: &lt;/b>${contact.fullname}&lt;/span>
+                &lt;span>&lt;b>E-Mail: &lt;/b>${contact.email}&lt;/span>
+                &lt;span>&lt;b>Phone: &lt;/b>${contact.phone}&lt;/span>
+            &lt;/div>
+            &lt;button class="final-delete-btn button-dark" onclick="finalDeleteContact(${index})">Yes, delete!&lt;/button>
+        &lt;/div>
+    `;
+}
+
+/**
+ * Deletes the object from the Array, update the data on the Server, reloads the Contact List, 
+ * clears User Detail Area, CLose Overlay and show Message
+ * @param {Number} index Position of the Contact Object in the Array 
+ */
+function finalDeleteContact(index) {
+    contacts.splice(index, 1);
+    setItem('contacts', contacts);
+    renderContactList();
+    clearUserDetail();
+    closeOverlay();
+    showMessage('Contact successfully deleted');
+    clearContactIdsFromTasks();
+}
+
+/**
+ * Clears the innerHtml of ID contact-detail
+ */
+function clearUserDetail() {
+    document.getElementById('contact-detail').innerHTML = '';
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#activeSearchInput">activeSearchInput</a></li><li><a href="global.html#activeSearchInputEdit">activeSearchInputEdit</a></li><li><a href="global.html#addCloseButton">addCloseButton</a></li><li><a href="global.html#addContact">addContact</a></li><li><a href="global.html#addDNone">addDNone</a></li><li><a href="global.html#addFocus">addFocus</a></li><li><a href="global.html#addFocusToContainer">addFocusToContainer</a></li><li><a href="global.html#addSubtask">addSubtask</a></li><li><a href="global.html#addSubtaskEdit">addSubtaskEdit</a></li><li><a href="global.html#allowDrop">allowDrop</a></li><li><a href="global.html#assignedToContactsTemplate">assignedToContactsTemplate</a></li><li><a href="global.html#assignedToContactsTemplateEdit">assignedToContactsTemplateEdit</a></li><li><a href="global.html#buildContact">buildContact</a></li><li><a href="global.html#calculateSubtasksToggled">calculateSubtasksToggled</a></li><li><a href="global.html#checkButtonContactsChecked">checkButtonContactsChecked</a></li><li><a href="global.html#checkButtonContactsCheckedEdit">checkButtonContactsCheckedEdit</a></li><li><a href="global.html#checkIdOnTaskAssignment">checkIdOnTaskAssignment</a></li><li><a href="global.html#checkPath">checkPath</a></li><li><a href="global.html#checkValueDueDate">checkValueDueDate</a></li><li><a href="global.html#checkValueTitle">checkValueTitle</a></li><li><a href="global.html#clearContactIdsFromTasks">clearContactIdsFromTasks</a></li><li><a href="global.html#clearId">clearId</a></li><li><a href="global.html#clearInputFieldsTaskBig">clearInputFieldsTaskBig</a></li><li><a href="global.html#clearPrioButtons">clearPrioButtons</a></li><li><a href="global.html#clearPrioButtonsEdit">clearPrioButtonsEdit</a></li><li><a href="global.html#clearTask">clearTask</a></li><li><a href="global.html#clearUserDetail">clearUserDetail</a></li><li><a href="global.html#closeMenu">closeMenu</a></li><li><a href="global.html#closeOverlay">closeOverlay</a></li><li><a href="global.html#closePopUpAt">closePopUpAt</a></li><li><a href="global.html#closePopUpContainer">closePopUpContainer</a></li><li><a href="global.html#closeTaskBig">closeTaskBig</a></li><li><a href="global.html#closeTaskEdit">closeTaskEdit</a></li><li><a href="global.html#collectAndRenderCoworkers">collectAndRenderCoworkers</a></li><li><a href="global.html#collectInputFields">collectInputFields</a></li><li><a href="global.html#collectInputFieldsEdit">collectInputFieldsEdit</a></li><li><a href="global.html#colorFontInput">colorFontInput</a></li><li><a href="global.html#controlIfDescriptionEmtpy">controlIfDescriptionEmtpy</a></li><li><a href="global.html#createInitials">createInitials</a></li><li><a href="global.html#createNewId">createNewId</a></li><li><a href="global.html#createTask">createTask</a></li><li><a href="global.html#createTaskInstance">createTaskInstance</a></li><li><a href="global.html#createTaskInstanceEdit">createTaskInstanceEdit</a></li><li><a href="global.html#defineFirstLetters">defineFirstLetters</a></li><li><a href="global.html#deleteAddedSubtask">deleteAddedSubtask</a></li><li><a href="global.html#deleteAddedSubtaskEdit">deleteAddedSubtaskEdit</a></li><li><a href="global.html#deleteContact">deleteContact</a></li><li><a href="global.html#deleteInputSubtask">deleteInputSubtask</a></li><li><a href="global.html#deleteInputSubtaskEdit">deleteInputSubtaskEdit</a></li><li><a href="global.html#deleteTask">deleteTask</a></li><li><a href="global.html#drag">drag</a></li><li><a href="global.html#drop">drop</a></li><li><a href="global.html#editContact">editContact</a></li><li><a href="global.html#editTask">editTask</a></li><li><a href="global.html#fetchAndReloadBoard">fetchAndReloadBoard</a></li><li><a href="global.html#fetchContacts">fetchContacts</a></li><li><a href="global.html#fetchContactsAt">fetchContactsAt</a></li><li><a href="global.html#fetchTasksAt">fetchTasksAt</a></li><li><a href="global.html#filterNames">filterNames</a></li><li><a href="global.html#filterNamesEdit">filterNamesEdit</a></li><li><a href="global.html#filterTasks">filterTasks</a></li><li><a href="global.html#filterTasksByProgress">filterTasksByProgress</a></li><li><a href="global.html#finalDeleteContact">finalDeleteContact</a></li><li><a href="global.html#generateSaveAndReload">generateSaveAndReload</a></li><li><a href="global.html#getAllInputFields">getAllInputFields</a></li><li><a href="global.html#getBackgroundColor">getBackgroundColor</a></li><li><a href="global.html#getCategoryColor">getCategoryColor</a></li><li><a href="global.html#getContactIdsfromTasks">getContactIdsfromTasks</a></li><li><a href="global.html#getContactPu">getContactPu</a></li><li><a href="global.html#getContactsFromServer">getContactsFromServer</a></li><li><a href="global.html#getField">getField</a></li><li><a href="global.html#getIndexById">getIndexById</a></li><li><a href="global.html#getInitials">getInitials</a></li><li><a href="global.html#getItem">getItem</a></li><li><a href="global.html#getPriority">getPriority</a></li><li><a href="global.html#getPriorityHtml">getPriorityHtml</a></li><li><a href="global.html#getProgress">getProgress</a></li><li><a href="global.html#getSubtasksPu">getSubtasksPu</a></li><li><a href="global.html#getTaskData">getTaskData</a></li><li><a href="global.html#getTasksFromFile">getTasksFromFile</a></li><li><a href="global.html#getTasksFromServer">getTasksFromServer</a></li><li><a href="global.html#getTools">getTools</a></li><li><a href="global.html#getToolsEdit">getToolsEdit</a></li><li><a href="global.html#gettingContactId">gettingContactId</a></li><li><a href="global.html#goToBoard">goToBoard</a></li><li><a href="global.html#handleMobileView">handleMobileView</a></li><li><a href="global.html#hideMobileDetailView">hideMobileDetailView</a></li><li><a href="global.html#highlightContact">highlightContact</a></li><li><a href="global.html#ifElseArrow">ifElseArrow</a></li><li><a href="global.html#ifElseArrowEdit">ifElseArrowEdit</a></li><li><a href="global.html#ifElseContact">ifElseContact</a></li><li><a href="global.html#ifElseToShowContacts">ifElseToShowContacts</a></li><li><a href="global.html#includeHTML">includeHTML</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initAddTask">initAddTask</a></li><li><a href="global.html#inputAddedSubtaskBlur">inputAddedSubtaskBlur</a></li><li><a href="global.html#inputAddedSubtaskBlurEdit">inputAddedSubtaskBlurEdit</a></li><li><a href="global.html#inputAddedSubtaskEdit">inputAddedSubtaskEdit</a></li><li><a href="global.html#inputAddedSubtaskFocus">inputAddedSubtaskFocus</a></li><li><a href="global.html#inputAddedSubtaskFocusClickOnImg">inputAddedSubtaskFocusClickOnImg</a></li><li><a href="global.html#inputAddedSubtaskFocusClickOnImgEdit">inputAddedSubtaskFocusClickOnImgEdit</a></li><li><a href="global.html#inputAssignedToBlur">inputAssignedToBlur</a></li><li><a href="global.html#inputAssignedToFocus">inputAssignedToFocus</a></li><li><a href="global.html#inputSubtask">inputSubtask</a></li><li><a href="global.html#inputSubtaskBlur">inputSubtaskBlur</a></li><li><a href="global.html#inputSubtaskBlurEdit">inputSubtaskBlurEdit</a></li><li><a href="global.html#inputSubtaskEdit">inputSubtaskEdit</a></li><li><a href="global.html#inputSubtaskFocus">inputSubtaskFocus</a></li><li><a href="global.html#inputSubtaskFocusEdit">inputSubtaskFocusEdit</a></li><li><a href="global.html#isMobile">isMobile</a></li><li><a href="global.html#minMaxDate">minMaxDate</a></li><li><a href="global.html#newContact">newContact</a></li><li><a href="global.html#openDeleteOverlay">openDeleteOverlay</a></li><li><a href="global.html#openPopUpAt">openPopUpAt</a></li><li><a href="global.html#openPopUpContainer">openPopUpContainer</a></li><li><a href="global.html#openTaskBig">openTaskBig</a></li><li><a href="global.html#regenerateInitials">regenerateInitials</a></li><li><a href="global.html#removeCloseButton">removeCloseButton</a></li><li><a href="global.html#removeDNone">removeDNone</a></li><li><a href="global.html#removeFocus">removeFocus</a></li><li><a href="global.html#removeFocusToContainer">removeFocusToContainer</a></li><li><a href="global.html#removeHighlight">removeHighlight</a></li><li><a href="global.html#removePerson">removePerson</a></li><li><a href="global.html#removePersonEdit">removePersonEdit</a></li><li><a href="global.html#renderAddTask">renderAddTask</a></li><li><a href="global.html#renderAlInformationsTaskBig">renderAlInformationsTaskBig</a></li><li><a href="global.html#renderAllInformationsEditTask">renderAllInformationsEditTask</a></li><li><a href="global.html#renderAwaitFeedback">renderAwaitFeedback</a></li><li><a href="global.html#renderBackgroundColorInitials">renderBackgroundColorInitials</a></li><li><a href="global.html#renderBackgroundColorInitialsEdit">renderBackgroundColorInitialsEdit</a></li><li><a href="global.html#renderBackgroundColorInitialsSelected">renderBackgroundColorInitialsSelected</a></li><li><a href="global.html#renderBackgroundColorOverlay">renderBackgroundColorOverlay</a></li><li><a href="global.html#renderBoard">renderBoard</a></li><li><a href="global.html#renderCheckImage">renderCheckImage</a></li><li><a href="global.html#renderCheckedSubtaskPu">renderCheckedSubtaskPu</a></li><li><a href="global.html#renderColorsCategoryPu">renderColorsCategoryPu</a></li><li><a href="global.html#renderContact">renderContact</a></li><li><a href="global.html#renderContactDetail">renderContactDetail</a></li><li><a href="global.html#renderContactDetailMenu">renderContactDetailMenu</a></li><li><a href="global.html#renderContactHtml">renderContactHtml</a></li><li><a href="global.html#renderContactIds">renderContactIds</a></li><li><a href="global.html#renderContactList">renderContactList</a></li><li><a href="global.html#renderContacts">renderContacts</a></li><li><a href="global.html#renderContactsAssignedTo">renderContactsAssignedTo</a></li><li><a href="global.html#renderContactsAssignedToEdit">renderContactsAssignedToEdit</a></li><li><a href="global.html#renderContactsChecked">renderContactsChecked</a></li><li><a href="global.html#renderContactsCheckedEdit">renderContactsCheckedEdit</a></li><li><a href="global.html#renderDateEdit">renderDateEdit</a></li><li><a href="global.html#renderDescription">renderDescription</a></li><li><a href="global.html#renderDescriptionEdit">renderDescriptionEdit</a></li><li><a href="global.html#renderDescriptionPu">renderDescriptionPu</a></li><li><a href="global.html#renderDone">renderDone</a></li><li><a href="global.html#renderDueDatePu">renderDueDatePu</a></li><li><a href="global.html#renderEditContactFields">renderEditContactFields</a></li><li><a href="global.html#renderEditContactHtmlForm">renderEditContactHtmlForm</a></li><li><a href="global.html#renderEmptyTodo">renderEmptyTodo</a></li><li><a href="global.html#renderFinishedSubtaskPu">renderFinishedSubtaskPu</a></li><li><a href="global.html#renderInProgress">renderInProgress</a></li><li><a href="global.html#renderInitialsSelected">renderInitialsSelected</a></li><li><a href="global.html#renderInitialsSelectedEdit">renderInitialsSelectedEdit</a></li><li><a href="global.html#renderInputSubtaskImg">renderInputSubtaskImg</a></li><li><a href="global.html#renderInputSubtaskImgEdit">renderInputSubtaskImgEdit</a></li><li><a href="global.html#renderLetterAndContacts">renderLetterAndContacts</a></li><li><a href="global.html#renderLetterHtml">renderLetterHtml</a></li><li><a href="global.html#renderNewContactFields">renderNewContactFields</a></li><li><a href="global.html#renderPopUpCardEdit">renderPopUpCardEdit</a></li><li><a href="global.html#renderPopUpCardTask">renderPopUpCardTask</a></li><li><a href="global.html#renderPrioEdit">renderPrioEdit</a></li><li><a href="global.html#renderPrioPu">renderPrioPu</a></li><li><a href="global.html#renderSubtaskBar">renderSubtaskBar</a></li><li><a href="global.html#renderSubtasks">renderSubtasks</a></li><li><a href="global.html#renderSubtasksEdit">renderSubtasksEdit</a></li><li><a href="global.html#renderSubtasksPu">renderSubtasksPu</a></li><li><a href="global.html#renderTaskHtml">renderTaskHtml</a></li><li><a href="global.html#renderTasks">renderTasks</a></li><li><a href="global.html#renderTitleEdit">renderTitleEdit</a></li><li><a href="global.html#renderToDo">renderToDo</a></li><li><a href="global.html#renderassignedToPu">renderassignedToPu</a></li><li><a href="global.html#returnDeleteHtml">returnDeleteHtml</a></li><li><a href="global.html#returnSubtaskTemplate">returnSubtaskTemplate</a></li><li><a href="global.html#returnSubtaskTemplateEdit">returnSubtaskTemplateEdit</a></li><li><a href="global.html#saveAddedSubtask">saveAddedSubtask</a></li><li><a href="global.html#saveAddedSubtaskEdit">saveAddedSubtaskEdit</a></li><li><a href="global.html#saveAndCloseEdit">saveAndCloseEdit</a></li><li><a href="global.html#saveContact">saveContact</a></li><li><a href="global.html#saveEditedContact">saveEditedContact</a></li><li><a href="global.html#saveandShowContact">saveandShowContact</a></li><li><a href="global.html#selectCategory">selectCategory</a></li><li><a href="global.html#selectPerson">selectPerson</a></li><li><a href="global.html#selectPersonEdit">selectPersonEdit</a></li><li><a href="global.html#setArrowRotated">setArrowRotated</a></li><li><a href="global.html#setBackgroundColorPrioButton">setBackgroundColorPrioButton</a></li><li><a href="global.html#setFocus">setFocus</a></li><li><a href="global.html#setFocusEdit">setFocusEdit</a></li><li><a href="global.html#setInputClear">setInputClear</a></li><li><a href="global.html#setItem">setItem</a></li><li><a href="global.html#setPrio">setPrio</a></li><li><a href="global.html#setPrioMedium">setPrioMedium</a></li><li><a href="global.html#setandSaveContact">setandSaveContact</a></li><li><a href="global.html#showContactDetail">showContactDetail</a></li><li><a href="global.html#showMessage">showMessage</a></li><li><a href="global.html#sortLettersByAlphabet">sortLettersByAlphabet</a></li><li><a href="global.html#toggleAssignedToDropDown">toggleAssignedToDropDown</a></li><li><a href="global.html#toggleAssignedToDropDownEdit">toggleAssignedToDropDownEdit</a></li><li><a href="global.html#toggleCategoryDropDown">toggleCategoryDropDown</a></li><li><a href="global.html#togglePrio">togglePrio</a></li><li><a href="global.html#validateEditNameInput">validateEditNameInput</a></li><li><a href="global.html#validateSaveNameInput">validateSaveNameInput</a></li><li><a href="global.html#validationAlertMessage">validationAlertMessage</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Mon Jul 01 2024 11:50:26 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -18,9 +18,9 @@ async function createTask() {
  * @returns {{
  * title: string,
  * description: string,
- * dueDate: string;
- * category: string;
- * taskId: Array<number>,
+ * dueDate: string,
+ * category: string,
+ * taskId: number,
  * priority: string,
  * progress: string,
  * }}

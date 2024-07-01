@@ -1,6 +1,6 @@
 /**
- * This function adds the focus to the assignedTo container
- * @param {String} nameContainer - This is the id of the specific container
+ * This function adds the focus to the assignedTo container.
+ * @param {String} nameContainer - This is the id of the specific container.
  */
 function inputAssignedToFocus(nameContainer) {
     addFocusToContainer(nameContainer);
@@ -8,8 +8,8 @@ function inputAssignedToFocus(nameContainer) {
 
 
 /**
- * This function removes the focus to the assignedTo container
- * @param {String} nameContainer - This is the id of the specific container
+ * This function removes the focus to the assignedTo container.
+ * @param {String} nameContainer - This is the id of the specific container.
  */
 function inputAssignedToBlur(nameContainer) {
     removeFocusToContainer(nameContainer);
@@ -17,8 +17,8 @@ function inputAssignedToBlur(nameContainer) {
 
 
 /**
- * This function selects the person you click on and puts it in the selectedContactsAssignedTo-array
- * @param {Number} num - This is the index of the contact you selected
+ * This function selects the person you click on and puts it in the selectedContactsAssignedTo-array.
+ * @param {Number} num - This is the index of the contact you selected.
  */
 function selectPerson(num) {
     let selectedPerson = contacts[`${num}`];
@@ -28,8 +28,8 @@ function selectPerson(num) {
 
 
 /**
- * This function removes the person you click on and removes the contact from the selectedContactsAssignedTo-array
- * @param {Number} num - This is the index of the contact you selected
+ * This function removes the person you click on and removes the contact from the selectedContactsAssignedTo-array.
+ * @param {Number} num - This is the index of the contact you selected.
  */
 function removePerson(num) {
     let selectedPerson = contacts[`${num}`]['fullname'];
@@ -45,8 +45,8 @@ function removePerson(num) {
 
 
 /**
- * When you click a contact, the background in the assignedTo-dropdown changes
- * @param {Number} num - This is the index of the contact you clicked 
+ * When you click a contact, the background in the assignedTo-dropdown changes.
+ * @param {Number} num - This is the index of the contact you clicked.
  */
 function checkButtonContactsChecked(num) {
     let button = getField(`button${num}`);
@@ -61,7 +61,7 @@ function checkButtonContactsChecked(num) {
 
 
 /**
- * The assignedTo-dropdown gets toggled
+ * The assignedTo-dropdown gets toggled.
  */
 function toggleAssignedToDropDown() {
     let assignedToDropDown = getField('assignedToDropDown');
@@ -76,7 +76,7 @@ function toggleAssignedToDropDown() {
 
 
 /**
- * If-else-statement according to the direction of the arrow
+ * If-else-statement according to the direction of the arrow.
  */
 function ifElseArrow() {
     if (isArrowAssignedToRotated == true) {
@@ -88,7 +88,7 @@ function ifElseArrow() {
 
 
 /**
- * If the arrow of assignedTo is rotated the contacts are shown
+ * If the arrow of assignedTo is rotated the contacts are shown.
  */
 function renderContactsAssignedTo() {
     let assignedToDropDownWrapper = getField('assignedToDropDownWrapper');
@@ -104,7 +104,7 @@ function renderContactsAssignedTo() {
 
 
 /**
- * This is the function to show the initials of the contacts
+ * This is the function to show the initials of the contacts.
  */
 function renderInitialsSelected() {
     let contactsSelectedContainer = getField('contactsSelectedContainer');
@@ -120,10 +120,10 @@ function renderInitialsSelected() {
 
 
 /**
- * This is the template to show the contacts in the dropdown
- * @param {Object} contact - This is the array of a specific contact
- * @param {Number} i - This is the index of the contact 
- * @returns The html-template gets returned
+ * This is the template to show the contacts in the dropdown.
+ * @param {Object} contact - This is the array of a specific contact.
+ * @param {Number} i - This is the index of the contact. 
+ * @returns The html-template gets returned.
  */
 function assignedToContactsTemplate(contact, i) {
     return /*html*/`
@@ -140,9 +140,9 @@ function assignedToContactsTemplate(contact, i) {
 
 
 /**
- * This function sets the look of the selected contacts by comparing the names
- * @param {String} fullname - This is the fullname of the contact-array
- * @param {Number} i - This is the index of the current contact 
+ * This function sets the look of the selected contacts by comparing the names.
+ * @param {String} fullname - This is the fullname of the contact-array.
+ * @param {Number} i - This is the index of the current contact. 
  */
 function renderContactsChecked(fullname, i) {
     for (let j = 0; j < selectedContactsAssignedTo.length; j++) {
@@ -163,8 +163,8 @@ function renderContactsChecked(fullname, i) {
 
 
 /**
- * This sets the background color of the initials of the selected contacts according to the initials
- * @param {Number} i - This is the index of the contact
+ * This sets the background color of the initials of the selected contacts according to the initials.
+ * @param {Number} i - This is the index of the contact.
  */
 function renderBackgroundColorInitialsSelected(i) {
     let initialsSelectedContact = selectedContactsAssignedTo[i]['initials'];
@@ -175,8 +175,8 @@ function renderBackgroundColorInitialsSelected(i) {
 
 
 /**
- * This sets the background color of the initials according to the intitals
- * @param {Number} i - This is the current index
+ * This sets the background color of the initials according to the intitals.
+ * @param {Number} i - This is the current index.
  */
 function renderBackgroundColorInitials(i) {
     let initialsSelectedContact = contacts[i]['initials'];
@@ -187,7 +187,7 @@ function renderBackgroundColorInitials(i) {
 
 
 /**
- * This function is when you search for a contact
+ * This function is when you search for a contact.
  */
 function filterNames() {
     let search = getField('assignedToInput').value.toLowerCase();
@@ -207,9 +207,9 @@ function filterNames() {
 
 
 /**
- * This function is, when the assignedTo-search-input is active
- * @param {String} search - This is the search word 
- * @param {HTMLElement} assignedToDropDownWrapper - This is the wrapper to show the contacts
+ * This function is, when the assignedTo-search-input is active.
+ * @param {String} search - This is the search word. 
+ * @param {HTMLElement} assignedToDropDownWrapper - This is the wrapper to show the contacts.
  */
 function activeSearchInput(search, assignedToDropDownWrapper) {
     assignedToDropDownWrapper.innerHTML = '';
