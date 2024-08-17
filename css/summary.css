@@ -93,6 +93,7 @@ body {
   display: flex;
   gap: 30px;
   margin-left: 38px;
+  margin-bottom: 38px;
 }
 
 .smallTask_container {
@@ -197,7 +198,8 @@ body {
 
 /* hovereffects */
 
-.smallToDo_containeer:hover {
+.smallToDo_container-1:hover,
+.smallToDo_container-2:hover {
   cursor: pointer;
   background-color: #2a3647;
   color: white;
@@ -209,7 +211,8 @@ body {
   color: white;
 }
 
-.smallToDo_containeer:hover .roundContainer {
+.smallToDo_container-1:hover .roundContainer,
+.smallToDo_container-2:hover .roundContainerDone {
   background-color: white;
 }
 
@@ -225,10 +228,6 @@ body {
   width: 64px;
   height: 64px;
   background-color: #2a3647;
-}
-
-.smallToDo_container:hover .roundContainerDone {
-  background-color: white;
 }
 
 .smallTask_container:hover {

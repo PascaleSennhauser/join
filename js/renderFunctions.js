@@ -103,7 +103,7 @@ function renderSummaryPageHtml() {
        </div>
        <div class="toDoContent_container">
        <div class="smallToDo_container">
-           <div class="smallToDo_containeer">
+           <div class="smallToDo_containeer smallToDo_container-1">
                <div class="dflexRow">
                   <div class="roundContainer">
                     <img src="./assets/img/editPen.svg" alt="toDoPen" class="summaryImgPen">
@@ -115,7 +115,7 @@ function renderSummaryPageHtml() {
                </div>
            </div>
            <div class="smallToDo_container">
-               <div class="smallToDo_containeer">
+               <div class="smallToDo_containeer  smallToDo_container-2">
                    <div class="dflexRow">
                    <div class="roundContainerDone">
                    <img src="./assets/img/Vector.svg" alt="toDoPen" class="summaryImgDone">
