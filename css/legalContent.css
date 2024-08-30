@@ -18,7 +18,7 @@ li {
     display: flex;
     flex-direction: column;
     margin-left: 232px;
-    min-height: 100vh;
+    width: 100%;
 }
 
 .content-header {
@@ -27,6 +27,10 @@ li {
 
 h1 {
     margin: 0;
+}
+
+.imprint-title {
+    font-size: 28px;
 }
 
 .legalNoticeHeader {
@@ -72,16 +76,26 @@ h1 {
     .mainLegalContent_container {
         flex-direction: column;
         position: relative;
+        height: 100vh;
+    }
+
+    .legalAndHelp_container {
+        margin: 20px 20px 110px 20px;
+        height: 100%;
     }
 
     .legalContent_container {
         text-wrap: wrap;
-        margin-left: 10px;
+        margin-left: 0px;
         position: relative;
     }
 
-    h1 {
+    .imprint-title {
         font-size: 14px;
+    }
+
+    h1 {
+        font-size: 16px;
     }
 
     h2 {
@@ -99,6 +113,14 @@ h1 {
     h4 {
         font-size: 10px;
         margin: 1px;
+    }
+
+    ul {
+        padding: 20px;
+    }
+
+    li {
+        font-size: 12px;
     }
 
 }
