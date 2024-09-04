@@ -52,6 +52,10 @@ h1 {
     margin: 100px;
 }
 
+.legalAndHelp_container a {
+    color: black;
+}
+
 /* legal content external */
 
 .legal-content-external {
