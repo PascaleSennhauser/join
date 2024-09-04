@@ -11,13 +11,13 @@
 @media only screen and (min-width: 992px) {}
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */
-@media only screen and (min-width: 1200px) {}
+@media only screen and (min-width: 1400px) {}
 
 
 /* Individual Responsive Queries */
 
 /* Remove mobile Navigation when over 1000px */
-@media (min-width: 1200px) {
+@media (min-width: 1400px) {
     .navbar-mobile-bottom {
         display: none;
     }
@@ -39,7 +39,7 @@
 }
 
 /* Here starts the responsiveness (header adaptation, sidebar removing and mobile footer addition) */
-@media (max-width: 1200px) {
+@media (max-width: 1400px) {
     .board-container {
         margin-top: 110px;
     }
@@ -134,17 +134,6 @@
 
     .mobile-logo {
         display: block !important;
-    }
-
-    .header-profile-icon {
-        height: 40px;
-        width: 40px;
-        border-width: 2px;
-        font-size: 11px;
-    }
-
-    .header-question-icon {
-        display: none;
     }
 
     .mobile-logo img {

@@ -266,16 +266,12 @@ body {
   height: 22px;
 }
 
-/* responsive */
-@media (max-width: 1200px) {
 
-  .navbar-mobile-bottom {
-    display: none;
-  }
-
+.navbar-mobile-bottom {
+  display: none;
 }
 
-@media (max-width: 1070px) {
+@media (max-width: 1400px) {
 
   .content-header {
     display: none;
@@ -307,6 +303,7 @@ body {
   .summaryHeader {
     margin-left: 0 !important;
     margin-top: 10px;
+    padding: 0px 0px 20px 0px !important;
   }
 
   #summaryContent_container {
@@ -382,11 +379,12 @@ body {
 
   .taskOverview_container {
     gap: 25px;
+    margin-bottom: 110px;
   }
 
 }
 
-@media (max-width: 550px) {
+@media (max-width: 650px) {
 
   .roundContainerDone {
     width: 44px;
@@ -429,8 +427,8 @@ body {
   .summaryHeader {
     display: flex;
     flex-direction: column;
-    padding-left: 74px;
-    padding-bottom: 50px;
+    padding: 0px 0px 50px 5px !important;
+    margin-top: 10px;
     gap: 15px;
     align-items: start;
   }
@@ -454,6 +452,7 @@ body {
 
   .toDoContent_container {
     align-items: start;
+    margin-left: 5px;
   }
 
   .summaryHeader {

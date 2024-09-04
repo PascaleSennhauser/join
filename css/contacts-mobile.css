@@ -11,13 +11,13 @@
 @media only screen and (min-width: 992px) {}
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */
-@media only screen and (min-width: 1200px) {}
+@media only screen and (min-width: 1400px) {}
 
 
 /* responsive */
 
 /* Remove mobile Navigation when over 1000px */
-@media (min-width: 1000px) {
+@media (min-width: 1400px) {
 
     .navbar-mobile-bottom,
     .close-sign-mobile,
@@ -28,7 +28,7 @@
     }
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1400px) {
 
     .backArrow,
     .newcontact-mobile {
@@ -65,12 +65,16 @@
     .contacts-main {
         padding: 20px 20px 20px 40px;
         box-sizing: border-box;
-        overflow: scroll;
+        overflow: auto;
         height: 100%;
     }
 
     .contacts-info {
         margin: 0;
+    }
+
+    .ctc-right {
+        width: 100%;
     }
 
     /* 
@@ -199,17 +203,6 @@
 
     .mobile-logo {
         display: block !important;
-    }
-
-    .header-profile-icon {
-        height: 40px;
-        width: 40px;
-        border-width: 2px;
-        font-size: 11px;
-    }
-
-    .header-question-icon {
-        display: none;
     }
 
     .mobile-logo img {
