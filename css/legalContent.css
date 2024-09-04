@@ -52,6 +52,28 @@ h1 {
     margin: 100px;
 }
 
+/* legal content external */
+
+.legal-content-external {
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.legal-content-external img {
+    width: 40px;
+    margin-bottom: 20px;
+}
+
+.seal {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.legal-content-external a {
+    color: black;
+}
+
 @media (max-width: 1200px) {
 
     .nav-left {

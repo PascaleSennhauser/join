@@ -75,6 +75,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin-top: 40px;
+  margin-bottom: 10px;
 }
 
 #loginWindow {
@@ -291,7 +293,6 @@
   width: 100%;
   bottom: 0;
   left: 0;
-  z-index: 9999;
 }
 
 .loginAllContentContainer {
@@ -322,8 +323,10 @@
   width: 100%;
   top: 0;
   left: 0;
+  bottom: 0;
+  right: 0;
   transform: translate(-50, -50);
-  position: absolute;
+  position: fixed;
   background-color: white;
   z-index: 999;
   animation-name: logoContainerDisappear;
@@ -401,9 +404,13 @@
   }
 
   #loginWindow {
-    margin-top: 100px !important;
+    margin-top: 50px !important;
     width: 396px;
     height: 515px;
+  }
+
+  .login-container {
+    margin-top: 0;
   }
 
   .inputIcon_container {
