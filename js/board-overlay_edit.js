@@ -106,10 +106,10 @@ function renderPrioEdit(index) {
  * @param {Number} i - The index of the prio button.
  */
 function setBackgroundColorPrioButton(i) {
-    const selectedButton = getField(`prioButtonEdit${i+1}`);
-    const selectedImgPrioColor = getField(`prioColorEdit${i+1}`);
-    const selectedImgPrioWhite = getField(`prioWhiteEdit${i+1}`);
-    const selectedPrio = getField(`prioEdit${i+1}`);
+    const selectedButton = getField(`prioButtonEdit${i + 1}`);
+    const selectedImgPrioColor = getField(`prioColorEdit${i + 1}`);
+    const selectedImgPrioWhite = getField(`prioWhiteEdit${i + 1}`);
+    const selectedPrio = getField(`prioEdit${i + 1}`);
     const selectedPrioName = selectedPrio.innerHTML.toLowerCase();
     selectedButton.classList.toggle(`${selectedPrioName}`);
     selectedButton.classList.toggle('prioTextWhite');
@@ -154,8 +154,8 @@ function collectInputFieldsEdit(index) {
     let dueDate = getField('dateInputEdit').value;
     let progress = tasks[index]['progress'];
     let priority = getPriority();
-    
-    return {taskId, title, description, category, dueDate, progress, priority};
+
+    return { taskId, title, description, category, dueDate, progress, priority };
 }
 
 
@@ -185,7 +185,7 @@ function collectInputFieldsEdit(index) {
 * dueDate: string 
  * }} - Returns the task-object.
  */
-function createTaskInstanceEdit({taskId, title, description, category, dueDate, progress, priority}) {
+function createTaskInstanceEdit({ taskId, title, description, category, dueDate, progress, priority }) {
     return {
         "taskid": taskId,
         "title": title,
@@ -207,6 +207,7 @@ function createTaskInstanceEdit({taskId, title, description, category, dueDate, 
  */
 function renderPopUpCardEdit(index) {
     return /*html*/`
+    <div class="pu-edit-wrapper">
         <div class="close-button-container-pu-edit">
             <img class="close-button-pu-edit" src="./assets/img/close-img.png" onclick="closeTaskEdit()">
         </div>
@@ -283,5 +284,6 @@ function renderPopUpCardEdit(index) {
                 <button class="ok-button" type="submit">Ok<img src="./assets/img/check.png"></button>
             </div>
         </form>
+    </div>
     `;
 }

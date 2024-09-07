@@ -124,6 +124,7 @@ function renderAlInformationsTaskBig(popUp, currentTask, index) {
  */
 function renderPopUpCardTask(currentTask, index) {
     return /*html*/`
+    <div class="pu-big-wrapper">
         <div class="category-close-btn-container">
             <div class="category-pu-big" id="categoryPuBig">${currentTask['category']}</div>
             <img class="close-button-pu-big" src="./assets/img/close-img.png" onclick="closeTaskBig()">
@@ -155,6 +156,7 @@ function renderPopUpCardTask(currentTask, index) {
                 <span>Edit</span>
             </div>
         </div>
+    </div
     `;
 }
 

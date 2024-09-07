@@ -177,7 +177,7 @@ document.addEventListener('click', function(event) {
     for (let i = 0; i < subtasks.length; i++) {
         if (currentSubtaskFocus === i) {
             let subtasksContainer = document.getElementById(`addedSubtaskContainer${i}`);
-            if (!subtasksContainer.contains(event.target)) {
+            if (subtasksContainer && !subtasksContainer.contains(event.target)) {
                 inputAddedSubtaskBlur(i);
                 currentSubtaskFocus = null;
             }
