@@ -29,7 +29,7 @@ function renderSignUpWindow() {
         </div>
         <p id="signUpPasswordCheckText"></p>
         <div class="SignUpPrivacy_container">
-              <input type="checkbox" id="privacyCheckbox" required><label for="privacy" class="privacyLabel">I accept the&nbsp</label><a class="blueLinks" href="../legal/privacyPolicyInternal.html">Privacy policy</a>
+              <input type="checkbox" id="privacyCheckbox" required><label for="privacy" class="privacyLabel">I accept the&nbsp</label><a class="blueLinks" onclick="openPrivacyPolicy()">Privacy policy</a>
             </div>
           <div class="loginButtons_container">
             <button id="signUpButton" class="registerButton" disabled="disabled">Sign Up</button>

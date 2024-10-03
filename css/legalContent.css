@@ -78,6 +78,10 @@ h1 {
     color: black;
 }
 
+.d-none {
+    display: none;
+}
+
 @media (max-width: 1200px) {
 
     .nav-left {

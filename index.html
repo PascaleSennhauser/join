@@ -11,13 +11,15 @@
   <script src="./js/remoteStorage.js"></script>
   <script src="./js/script.js"></script>
   <script src="./js/login.js"></script>
+  <script src="./js/includeHtml.js"></script>
   <link rel="stylesheet" href="./css/mobileSpecific.css">
   <link rel="stylesheet" href="./css/login.css" />
   <link rel="stylesheet" href="./css/general-design.css" />
   <link rel="stylesheet" href="./css/fonts.css" />
+  <link rel="stylesheet" href="./css/legalContent.css">
 </head>
 
-<body>
+<body onload="includeHTML()">
   <div id="popupContainer">
     <div id="successRegistration">
       <p id="popupRegistration">successful registration!</p>
@@ -77,6 +79,10 @@
         <a href="./legal/privacyPolicyExternal.html" class="legalContentLinksLogin">Privacy Policy</a>
         <a href="./legal/legalNoticeExternal.html" class="legalContentLinksLogin">Legal Notice</a>
       </div>
+    </div>
+
+    <div id="privacyPolicySignUp" class="d-none" w3-include-html="./templates/privacyPolicyExternal_template.html">
+
     </div>
 
   </div>

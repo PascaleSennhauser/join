@@ -169,3 +169,19 @@ function goBackToLoginAfterSignUp() {
     window.location.href = "./index.html";
   }, 3000);
 }
+
+
+/**
+ * This function opens the privacy policy in the sign up.
+ */
+function openPrivacyPolicy() {
+  document.getElementById('privacyPolicySignUp').classList.remove('d-none');
+}
+
+
+/**
+ * This function closes the privacy policy in the sign up.
+ */
+function closePrivacyPolicy() {
+  document.getElementById('privacyPolicySignUp').classList.add('d-none');
+}
